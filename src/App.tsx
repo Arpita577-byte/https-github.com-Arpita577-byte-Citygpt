@@ -257,65 +257,71 @@ export default function App() {
         case "my_reports":
           // Citizen reports history list showing detailed track timelines
           return (
-            <div className="max-w-4xl mx-auto px-6 pt-24 pb-16 text-neutral-100">
-              <div className="border-b border-neutral-900 pb-4 mb-8">
-                <span className="text-xs font-mono uppercase text-indigo-400 bg-indigo-950/40 px-2.5 py-1 rounded border border-indigo-500/10">Personal Filing History</span>
-                <h2 className="text-3xl font-bold font-display tracking-tight text-neutral-50 mt-2">My Reports History 📜</h2>
-                <p className="text-xs text-neutral-400 font-light mt-1">Track resolution sequences, work divisions, and earn dynamic Green rewards.</p>
+            <div className="max-w-4xl mx-auto px-6 pt-24 pb-16 text-slate-800 font-sans">
+              <div className="border-b border-slate-200 pb-5 mb-8">
+                <span className="text-xs font-bold font-mono uppercase text-sky-700 bg-sky-50 px-3 py-1 rounded-full border border-sky-100">
+                  Personal Filing History
+                </span>
+                <h2 className="text-3xl font-extrabold font-display tracking-tight text-slate-900 mt-3">My Reports History 📜</h2>
+                <p className="text-xs text-slate-500 font-light mt-1">Track resolution sequences, assigned crew divisions, and earn dynamic Green rewards.</p>
               </div>
 
               {complaints.length === 0 ? (
-                <p className="text-center text-neutral-500 py-12">No reports recorded in current cache.</p>
+                <div className="text-center py-16 bg-white border border-slate-200 rounded-[2.5rem] p-8 shadow-sm">
+                  <span className="text-4xl block mb-2">📂</span>
+                  <p className="font-bold text-slate-700 text-sm">No reports recorded in current cache.</p>
+                  <p className="text-xs text-slate-500 mt-1">File a complaint to get started tracking municipal repair progress.</p>
+                </div>
               ) : (
                 <div className="flex flex-col gap-6">
                   {complaints.map((c) => (
-                    <div key={c.id} className="glass-card rounded-2xl border border-neutral-850 p-6 flex flex-col md:flex-row gap-6 relative overflow-hidden group hover:border-neutral-750 transition-all">
-                      <div className="w-full md:w-36 h-36 rounded-xl overflow-hidden bg-neutral-950 border border-neutral-900 flex-shrink-0">
-                        <img src={c.imageUrl} alt={c.title} className="w-full h-full object-cover" />
+                    <div key={c.id} className="bg-white rounded-[2.5rem] border border-slate-200 p-6 flex flex-col md:flex-row gap-6 relative overflow-hidden group hover:border-slate-300 hover:shadow-md transition-all shadow-sm">
+                      <div className="w-full md:w-36 h-36 rounded-2xl overflow-hidden bg-slate-50 border border-slate-100 flex-shrink-0">
+                        <img src={c.imageUrl} alt={c.title} className="w-full h-full object-cover" referrerPolicy="no-referrer" />
                       </div>
                       <div className="flex-1 flex flex-col justify-between">
                         <div>
-                          <div className="flex items-center gap-2 mb-1">
-                            <span className="text-[10px] font-mono uppercase bg-neutral-900 border border-neutral-800 text-indigo-400 px-2 py-0.5 rounded">
+                          <div className="flex items-center gap-2 mb-1.5 flex-wrap">
+                            <span className="text-[10px] font-bold font-mono uppercase bg-slate-100 border border-slate-200 text-slate-700 px-2.5 py-0.5 rounded-full">
                               {c.id}
                             </span>
-                            <span className="text-xs text-neutral-500 font-mono capitalize">Category: {c.category}</span>
-                            <span className={`text-[10px] uppercase px-2 font-mono rounded font-bold ${c.priority === "high" ? "bg-rose-950 text-rose-400" : "bg-neutral-900 text-neutral-400"}`}>{c.priority}</span>
+                            <span className="text-xs text-slate-500 font-semibold capitalize bg-slate-550/5 px-2 py-0.5 rounded-full">Category: {c.category}</span>
+                            <span className={`text-[10px] uppercase px-2 py-0.5 border font-mono rounded-full font-bold ${c.priority === "high" ? "bg-rose-50 border-rose-100 text-rose-700" : "bg-slate-50 border-slate-150 text-slate-550"}`}>{c.priority}</span>
                           </div>
-                          <h4 className="text-base font-bold text-neutral-100">{c.title}</h4>
-                          <p className="text-xs text-neutral-400 font-light mt-1">{c.description}</p>
-                          <p className="text-[10px] text-neutral-500 font-mono mt-1.5 flex items-center gap-1">
-                            <MapPin className="w-3 h-3" /> Location: {c.locationDescription}
+                          <h4 className="text-sm font-extrabold text-slate-900">{c.title}</h4>
+                          <p className="text-xs text-slate-650 font-light mt-1.5 leading-relaxed">{c.description}</p>
+                          <p className="text-[10px] text-slate-500 font-mono mt-2 flex items-center gap-1 font-bold">
+                            <MapPin className="w-3.5 h-3.5 text-sky-555" /> Location: <span className="text-slate-800 font-light">{c.locationDescription}</span>
                           </p>
                         </div>
 
                         {/* Tracker sequential timeline */}
-                        <div className="mt-4 pt-4 border-t border-neutral-900 grid grid-cols-5 text-center text-[10px] text-neutral-500">
+                        <div className="mt-5 pt-4 border-t border-slate-100 grid grid-cols-5 text-center text-[10px] text-slate-400 font-bold">
                           <div className="flex flex-col items-center gap-1">
-                            <div className="w-4 h-4 bg-indigo-600 rounded-full flex items-center justify-center text-white font-bold font-mono text-[9px]">✓</div>
-                            <span className="font-semibold text-neutral-300">Reported</span>
+                            <div className="w-4.5 h-4.5 bg-sky-600 rounded-full flex items-center justify-center text-white font-bold font-mono text-[9px] shadow-sm">✓</div>
+                            <span className="font-bold text-slate-800">Reported</span>
                           </div>
                           <div className="flex flex-col items-center gap-1">
-                            <div className="w-4 h-4 bg-indigo-600 rounded-full flex items-center justify-center text-white font-bold font-mono text-[9px]">✓</div>
-                            <span className="font-semibold text-neutral-300">AI Detected</span>
+                            <div className="w-4.5 h-4.5 bg-sky-600 rounded-full flex items-center justify-center text-white font-bold font-mono text-[9px] shadow-sm">✓</div>
+                            <span className="font-bold text-slate-800">AI Detected</span>
                           </div>
                           <div className="flex flex-col items-center gap-1">
-                            <div className={`w-4 h-4 rounded-full flex items-center justify-center text-white font-bold font-mono text-[9px] ${c.status !== "reported" && c.status !== "ai_detected" ? "bg-indigo-600" : "bg-neutral-800"}`}>
+                            <div className={`w-4.5 h-4.5 rounded-full flex items-center justify-center text-white font-bold font-mono text-[9px] ${c.status !== "reported" && c.status !== "ai_detected" ? "bg-sky-600 shadow-sm" : "bg-slate-100 text-slate-400"}`}>
                               {c.status !== "reported" && c.status !== "ai_detected" ? "✓" : "3"}
                             </div>
-                            <span className={c.status !== "reported" && c.status !== "ai_detected" ? "font-semibold text-neutral-300" : ""}>Assigned</span>
+                            <span className={c.status !== "reported" && c.status !== "ai_detected" ? "font-bold text-slate-800" : ""}>Assigned</span>
                           </div>
                           <div className="flex flex-col items-center gap-1">
-                            <div className={`w-4 h-4 rounded-full flex items-center justify-center text-white font-bold font-mono text-[9px] ${c.status === "working" || c.status === "resolved" ? "bg-indigo-600" : "bg-neutral-800"}`}>
+                            <div className={`w-4.5 h-4.5 rounded-full flex items-center justify-center text-white font-bold font-mono text-[9px] ${c.status === "working" || c.status === "resolved" ? "bg-sky-600 shadow-sm" : "bg-slate-100 text-slate-400"}`}>
                               {c.status === "working" || c.status === "resolved" ? "✓" : "4"}
                             </div>
-                            <span className={c.status === "working" || c.status === "resolved" ? "font-semibold text-neutral-300" : ""}>Working</span>
+                            <span className={c.status === "working" || c.status === "resolved" ? "font-bold text-slate-800" : ""}>Working</span>
                           </div>
                           <div className="flex flex-col items-center gap-1">
-                            <div className={`w-4 h-4 rounded-full flex items-center justify-center text-white font-bold font-mono text-[9px] ${c.status === "resolved" ? "bg-emerald-500" : "bg-neutral-800"}`}>
+                            <div className={`w-4.5 h-4.5 rounded-full flex items-center justify-center text-white font-bold font-mono text-[9px] ${c.status === "resolved" ? "bg-emerald-500 shadow-sm" : "bg-slate-100 text-slate-400"}`}>
                               {c.status === "resolved" ? "✓" : "5"}
                             </div>
-                            <span className={c.status === "resolved" ? "font-semibold text-emerald-400 font-bold" : ""}>Resolved</span>
+                            <span className={c.status === "resolved" ? "font-bold text-emerald-600" : ""}>Resolved</span>
                           </div>
                         </div>
 
@@ -330,51 +336,53 @@ export default function App() {
         case "city_health":
           // Deep performance statistics page
           return (
-            <div className="max-w-4xl mx-auto px-6 pt-24 pb-16 text-neutral-100">
-              <div className="border-b border-neutral-900 pb-4 mb-8">
-                <span className="text-xs font-mono uppercase text-indigo-400 bg-indigo-950/40 px-2.5 py-1 rounded border border-indigo-500/10">Grid diagnostics</span>
-                <h2 className="text-3xl font-bold font-display tracking-tight text-neutral-50 mt-2">Grid Status Metrics 📊</h2>
-                <p className="text-xs text-neutral-400 font-light mt-1 font-mono">Telemetry performance metrics gathered via automated city sensors.</p>
+            <div className="max-w-4xl mx-auto px-6 pt-24 pb-16 text-slate-800 font-sans">
+              <div className="border-b border-slate-200 pb-4 mb-8">
+                <span className="text-xs font-bold font-mono uppercase text-sky-700 bg-sky-50 px-3 py-1 rounded-full border border-sky-100">
+                  Grid diagnostics
+                </span>
+                <h2 className="text-3xl font-extrabold font-display tracking-tight text-slate-900 mt-3">Grid Status Metrics 📊</h2>
+                <p className="text-xs text-slate-500 font-light mt-1 font-mono">Telemetry performance metrics gathered via automated city sensors.</p>
               </div>
 
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 mb-8 text-xs font-light">
-                <div className="glass-panel p-6 border border-neutral-800 rounded-2xl flex flex-col gap-2">
-                  <h4 className="font-bold text-neutral-200 uppercase font-mono text-[10px] text-amber-400">Waste Management: 84%</h4>
-                  <p className="text-neutral-400 leading-relaxed">Solid waste removal, commercial dumpster emptying intervals, litter sweeps. High density clusters present Ward 3 School strip.</p>
-                  <div className="w-full bg-neutral-950 h-1.5 rounded-full mt-2 overflow-hidden">
-                    <div className="bg-amber-400 h-full rounded-full" style={{ width: "84%" }} />
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 mb-8 text-xs">
+                <div className="bg-white p-6 border border-slate-200 rounded-[2rem] flex flex-col gap-2 shadow-sm">
+                  <h4 className="font-extrabold text-slate-800 uppercase font-mono text-[10px] text-amber-600">Waste Management: 84%</h4>
+                  <p className="text-slate-500 leading-relaxed font-light">Solid waste removal, commercial dumpster emptying intervals, litter sweeps. High density clusters present Ward 3 School strip.</p>
+                  <div className="w-full bg-slate-100 h-2 rounded-full mt-2 overflow-hidden">
+                    <div className="bg-amber-500 h-full rounded-full" style={{ width: "84%" }} />
                   </div>
                 </div>
 
-                <div className="glass-panel p-6 border border-neutral-800 rounded-2xl flex flex-col gap-2">
-                  <h4 className="font-bold text-neutral-200 uppercase font-mono text-[10px] text-sky-400">Hydraulic Pipe Grid: 96%</h4>
-                  <p className="text-neutral-400 leading-relaxed">Municipal pressure networks, main canal filtration, flooded lane drainage channels. Section 4 flyover water leak repair under restoration.</p>
-                  <div className="w-full bg-neutral-950 h-1.5 rounded-full mt-2 overflow-hidden">
-                    <div className="bg-sky-400 h-full rounded-full" style={{ width: "96%" }} />
+                <div className="bg-white p-6 border border-slate-200 rounded-[2rem] flex flex-col gap-2 shadow-sm">
+                  <h4 className="font-extrabold text-slate-800 uppercase font-mono text-[10px] text-sky-600">Hydraulic Pipe Grid: 96%</h4>
+                  <p className="text-slate-500 leading-relaxed font-light">Municipal pressure networks, main canal filtration, flooded lane drainage channels. Section 4 flyover water leak repair under restoration.</p>
+                  <div className="w-full bg-slate-100 h-2 rounded-full mt-2 overflow-hidden">
+                    <div className="bg-sky-500 h-full rounded-full" style={{ width: "96%" }} />
                   </div>
                 </div>
 
-                <div className="glass-panel p-6 border border-neutral-800 rounded-2xl flex flex-col gap-2">
-                  <h4 className="font-bold text-neutral-200 uppercase font-mono text-[10px] text-emerald-400">Pavement Highways: 91%</h4>
-                  <p className="text-neutral-400 leading-relaxed">Structural asphalt potholes repaired, line markings, flyover descents. Western express way maintenance scheduled.</p>
-                  <div className="w-full bg-neutral-950 h-1.5 rounded-full mt-2 overflow-hidden">
-                    <div className="bg-emerald-400 h-full rounded-full" style={{ width: "91%" }} />
+                <div className="bg-white p-6 border border-slate-200 rounded-[2rem] flex flex-col gap-2 shadow-sm">
+                  <h4 className="font-extrabold text-slate-800 uppercase font-mono text-[10px] text-emerald-600">Pavement Highways: 91%</h4>
+                  <p className="text-slate-500 leading-relaxed font-light">Structural asphalt potholes repaired, line markings, flyover descents. Western express way maintenance scheduled.</p>
+                  <div className="w-full bg-slate-100 h-2 rounded-full mt-2 overflow-hidden">
+                    <div className="bg-emerald-500 h-full rounded-full" style={{ width: "91%" }} />
                   </div>
                 </div>
 
-                <div className="glass-panel p-6 border border-neutral-800 rounded-2xl flex flex-col gap-2">
-                  <h4 className="font-bold text-neutral-200 uppercase font-mono text-[10px] text-purple-400">Electrical Lighting: 88%</h4>
-                  <p className="text-neutral-400 leading-relaxed">Avenue streetlight nodes operating, transformer burnout parameters, dark lanes resolved. Primary circuit Ward 1 resolved.</p>
-                  <div className="w-full bg-neutral-950 h-1.5 rounded-full mt-2 overflow-hidden">
-                    <div className="bg-purple-400 h-full rounded-full" style={{ width: "88%" }} />
+                <div className="bg-white p-6 border border-slate-200 rounded-[2rem] flex flex-col gap-2 shadow-sm">
+                  <h4 className="font-extrabold text-slate-800 uppercase font-mono text-[10px] text-purple-600">Electrical Lighting: 88%</h4>
+                  <p className="text-slate-500 leading-relaxed font-light">Avenue streetlight nodes operating, transformer burnout parameters, dark lanes resolved. Primary circuit Ward 1 resolved.</p>
+                  <div className="w-full bg-slate-100 h-2 rounded-full mt-2 overflow-hidden">
+                    <div className="bg-purple-500 h-full rounded-full" style={{ width: "88%" }} />
                   </div>
                 </div>
               </div>
 
-              <div className="glass-panel p-6 rounded-3xl border border-indigo-500/10 glow-indigo text-center flex flex-col gap-3">
-                <span className="text-xs uppercase font-mono text-indigo-400">Composite Index Performance</span>
-                <p className="text-5xl font-black font-display text-emerald-400">91/100</p>
-                <p className="text-neutral-400 leading-relaxed max-w-md mx-auto text-xs mt-1">Excellent Performance Grade. The metro grid operates 13% more efficiently than comparable regional capitals with standard manual complaint pipelines.</p>
+              <div className="bg-sky-50/60 p-8 rounded-[2.5rem] border border-sky-100 text-center flex flex-col gap-3 shadow-sm">
+                <span className="text-xs uppercase font-mono text-sky-700 font-bold">Composite Index Performance</span>
+                <p className="text-5xl font-black font-display text-emerald-600">91/100</p>
+                <p className="text-slate-655 leading-relaxed max-w-md mx-auto text-xs mt-1 font-light">Excellent Performance Grade. The metro grid operates 13% more efficiently than comparable regional capitals with standard manual complaint pipelines.</p>
               </div>
 
             </div>

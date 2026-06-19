@@ -72,53 +72,53 @@ export default function AIAssistant({ onSendMessage }: AIAssistantProps) {
   };
 
   return (
-    <div className="max-w-4xl mx-auto px-6 pt-24 pb-16 text-neutral-100 flex flex-col h-[calc(100vh-80px)] min-h-[600px]">
+    <div className="max-w-4xl mx-auto px-6 pt-24 pb-16 text-slate-800 flex flex-col h-[calc(100vh-80px)] min-h-[600px] font-sans">
       
       {/* Telemetry Indicator Title */}
-      <div className="flex items-center justify-between border-b border-neutral-900 pb-4 mb-4 flex-shrink-0">
-        <div className="flex items-center gap-2">
-          <Brain className="w-6 h-6 text-indigo-400 animate-pulse" />
+      <div className="flex items-center justify-between border-b border-slate-200 pb-4 mb-4 flex-shrink-0">
+        <div className="flex items-center gap-2.5">
+          <Brain className="w-6 h-6 text-sky-600 animate-pulse" />
           <div>
-            <h2 className="text-xl font-bold font-display tracking-tight text-neutral-50">CityGPT Intelligence AI</h2>
-            <p className="text-[10px] text-neutral-500 font-mono">MODEL: GEMINI-3.5-FLASH · METROPOLITAN ACTIVE BRAIN</p>
+            <h2 className="text-xl font-extrabold font-display tracking-tight text-slate-900">CityGPT Intelligence AI</h2>
+            <p className="text-[10px] text-slate-500 font-mono font-bold">MODEL: GEMINI-3.5-FLASH · METROPOLITAN ACTIVE BRAIN</p>
           </div>
         </div>
-        <span className="text-[10px] text-indigo-400 bg-indigo-950/40 px-2.5 py-1 border border-indigo-500/10 rounded font-mono">
+        <span className="text-[10px] text-sky-700 bg-sky-50 px-2.5 py-1 border border-sky-100 rounded-full font-mono font-bold">
           Language Bridge Node: Active
         </span>
       </div>
 
       {/* Messages Scroll stage */}
-      <div className="flex-1 bg-neutral-950 border border-neutral-900 rounded-3xl p-6 overflow-y-auto mb-4 flex flex-col gap-4">
+      <div className="flex-1 bg-white border border-slate-200 rounded-[2rem] p-6 overflow-y-auto mb-4 flex flex-col gap-4 shadow-sm">
         {messages.map((m) => (
           <div 
             key={m.id} 
             className={`flex gap-3 max-w-[85%] ${m.sender === "user" ? "self-end flex-row-reverse" : "self-start"}`}
           >
             {/* Avatar block */}
-            <div className={`w-8 h-8 rounded-xl flex items-center justify-center flex-shrink-0 border ${m.sender === "user" ? "bg-indigo-950 border-indigo-500/25 text-indigo-400" : "bg-neutral-900 border-neutral-800 text-neutral-300"}`}>
-              {m.sender === "user" ? <User className="w-4 h-4" /> : <Brain className="w-4 h-4 text-indigo-400" />}
+            <div className={`w-8 h-8 rounded-xl flex items-center justify-center flex-shrink-0 border ${m.sender === "user" ? "bg-sky-50 border-sky-100 text-sky-700 font-bold" : "bg-slate-100 border-slate-200 text-slate-600"}`}>
+              {m.sender === "user" ? <User className="w-4 h-4" /> : <Brain className="w-4 h-4 text-sky-600" />}
             </div>
 
             {/* Bubble layout */}
             <div className={`flex flex-col gap-1.5 ${m.sender === "user" ? "items-end" : "items-start"}`}>
               <div 
-                className={`p-4 rounded-3xl text-sm leading-relaxed ${m.sender === "user" ? "bg-indigo-600 text-white rounded-tr-none" : "bg-neutral-900/50 text-neutral-200 border border-neutral-850 rounded-tl-none markdown-body font-light text-wrap break-words whitespace-pre-wrap"}`}
+                className={`p-4 rounded-3xl text-sm leading-relaxed ${m.sender === "user" ? "bg-sky-600 text-white rounded-tr-none shadow-sm" : "bg-slate-50 text-slate-800 border border-slate-150 rounded-tl-none markdown-body font-light text-wrap break-words whitespace-pre-wrap"}`}
               >
                 {m.text}
               </div>
-              <span className="text-[9px] font-mono text-neutral-500 px-1">{m.timestamp}</span>
+              <span className="text-[9px] font-mono text-slate-400 px-1 font-bold">{m.timestamp}</span>
             </div>
           </div>
         ))}
 
         {loading && (
           <div className="flex gap-3 self-start max-w-[80%] items-center animate-pulse">
-            <div className="w-8 h-8 rounded-xl bg-neutral-900 border border-neutral-800 flex items-center justify-center text-neutral-400">
-              <Brain className="w-4 h-4 animate-spin text-indigo-500" />
+            <div className="w-8 h-8 rounded-xl bg-slate-100 border border-slate-200 flex items-center justify-center text-slate-400">
+              <Brain className="w-4 h-4 animate-spin text-sky-600" />
             </div>
-            <div className="p-4 bg-neutral-900/40 border border-neutral-850 rounded-3xl rounded-tl-none text-xs font-mono text-indigo-400 flex items-center gap-2">
-              <RefreshCw className="w-3.5 h-3.5 animate-spin" />
+            <div className="p-4 bg-slate-50 border border-slate-150 rounded-3xl rounded-tl-none text-xs font-mono text-sky-700 flex items-center gap-2 font-bold">
+              <RefreshCw className="w-3.5 h-3.5 animate-spin text-sky-500" />
               CityGPT thinking and matching telemetry buffers...
             </div>
           </div>
@@ -129,7 +129,7 @@ export default function AIAssistant({ onSendMessage }: AIAssistantProps) {
 
       {/* Suggestion prompt list */}
       <div className="mb-4 flex-shrink-0">
-        <span className="text-[10px] font-mono uppercase tracking-wider text-neutral-500 block mb-2 flex items-center gap-1">
+        <span className="text-[10px] font-bold font-mono uppercase tracking-wider text-slate-400 block mb-2 flex items-center gap-1.5">
           <Sparkles className="w-3 h-3 text-amber-500" /> Dialect Suggestion Prompts (Tap to test):
         </span>
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
@@ -137,10 +137,10 @@ export default function AIAssistant({ onSendMessage }: AIAssistantProps) {
             <button
               key={idx}
               onClick={() => handleSendText(s.text)}
-              className="bg-neutral-900/40 hover:bg-neutral-900 border border-neutral-850 hover:border-neutral-700 text-left p-3 rounded-xl text-xs flex flex-col gap-1 transition-all pointer-events-auto cursor-pointer"
+              className="bg-white hover:bg-slate-50 border border-slate-200 hover:border-slate-300 text-left p-3.5 rounded-2xl text-xs flex flex-col gap-1 transition-all pointer-events-auto cursor-pointer shadow-sm"
             >
-              <strong className="text-indigo-400 font-semibold">{s.title}</strong>
-              <span className="text-neutral-500 text-[10px] truncate w-full">"{s.text}"</span>
+              <strong className="text-sky-700 font-extrabold">{s.title}</strong>
+              <span className="text-slate-500 text-[10px] truncate w-full">"{s.text}"</span>
             </button>
           ))}
         </div>
@@ -158,12 +158,12 @@ export default function AIAssistant({ onSendMessage }: AIAssistantProps) {
               if (e.key === "Enter") handleSendText(inputText);
             }}
             placeholder="Ask about active telemetry or type regional complaints..."
-            className="w-full bg-neutral-950 border border-neutral-850 rounded-2xl py-4.5 pl-4 pr-12 text-sm text-neutral-200 outline-none focus:border-indigo-500 transition-colors"
+            className="w-full bg-white border border-slate-200 rounded-2xl py-4 pl-4 pr-12 text-sm text-slate-800 outline-none focus:border-sky-500 transition-colors"
           />
           <button 
             id="assistant-textbox-submit"
             onClick={() => handleSendText(inputText)}
-            className="absolute right-3 top-3 p-2 bg-indigo-600 hover:bg-indigo-500 text-white rounded-xl transition-all cursor-pointer"
+            className="absolute right-3 top-3 p-2 bg-sky-600 hover:bg-sky-500 text-white rounded-xl transition-all cursor-pointer shadow"
           >
             <Send className="w-4 h-4" />
           </button>
