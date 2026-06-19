@@ -2,7 +2,8 @@ import React, { useState, useEffect } from "react";
 import { 
   Building2, MapPin, Brain, History, Bell, Award, 
   Sparkles, MessageSquare, AlertTriangle, Hammer, Shield, 
-  Menu, X, CircleDot, Info, Calendar, ChevronRight, Check, Activity 
+  Menu, X, CircleDot, Info, Calendar, ChevronRight, Check, Activity,
+  Sun, Moon
 } from "lucide-react";
 
 import { 
@@ -52,6 +53,21 @@ export default function App() {
 
   // Focus a specific selected complaint on LiveMap
   const [mapSelectedId, setMapSelectedId] = useState<string | null>(null);
+
+  // Next-Gen Premium Dark/Light theme mode state requested by user
+  const [theme, setTheme] = useState<"light" | "dark">("light");
+
+  useEffect(() => {
+    if (theme === "dark") {
+      document.documentElement.classList.add("dark");
+    } else {
+      document.documentElement.classList.remove("dark");
+    }
+  }, [theme]);
+
+  const toggleTheme = () => {
+    setTheme(prev => prev === "light" ? "dark" : "light");
+  };
 
   // Fetch initial telemetry databases from Express server-side
   const syncTelemetry = async () => {
@@ -207,6 +223,8 @@ export default function App() {
           onNavigate={(page) => setActivePage(page)} 
           onSetRole={(role) => setActiveRole(role)}
           cityHealth={cityHealthScore}
+          isDarkMode={theme === "dark"}
+          onToggleTheme={toggleTheme}
         />
       );
     }
@@ -428,10 +446,10 @@ export default function App() {
   };
 
   return (
-    <div className="min-h-screen bg-[#F8FAFC] text-slate-800 flex flex-col font-sans">
+    <div className={`min-h-screen flex flex-col font-sans transition-colors duration-300 ${theme === "dark" ? "bg-slate-950 text-slate-100" : "bg-[#F8FAFC] text-slate-800"}`}>
       
       {/* PERSISTENT LUXURY NAVBAR */}
-      <nav className="fixed top-0 left-0 right-0 z-40 bg-white/95 backdrop-blur-md border-b border-slate-200/80 px-6 py-4">
+      <nav className={`fixed top-0 left-0 right-0 z-40 backdrop-blur-md border-b transition-colors duration-350 px-6 py-4 ${theme === "dark" ? "bg-slate-900/95 border-slate-800/80 text-white" : "bg-white/95 border-slate-200/80 text-slate-800"}`}>
         <div className="max-w-7xl mx-auto flex items-center justify-between">
           
           {/* Logo */}
@@ -439,46 +457,64 @@ export default function App() {
             onClick={() => { setActivePage("landing"); setMobileMenuOpen(false); }}
             className="flex items-center gap-2 cursor-pointer group"
           >
-            <span className="text-lg font-extrabold font-display tracking-tight text-slate-900 flex items-center gap-1.5 uppercase">
+            <span className={`text-lg font-extrabold font-display tracking-tight flex items-center gap-1.5 uppercase ${theme === "dark" ? "text-white" : "text-slate-900"}`}>
               🌆 CityGPT
             </span>
           </div>
 
           {/* Desktop Nav Selection Links */}
           <div className="hidden lg:flex items-center gap-6">
-            <button onClick={() => setActivePage("landing")} className={`premium-nav-item text-xs font-bold cursor-pointer transition-colors nav-blue ${activePage === "landing" ? "active" : ""}`}>Home</button>
-            <button onClick={() => { setActiveRole("citizen"); setActivePage("dashboard"); }} className={`premium-nav-item text-xs font-bold cursor-pointer transition-colors nav-green ${activePage === "dashboard" ? "active" : ""}`}>Citizen Hub</button>
-            <button onClick={() => { setActiveRole("citizen"); setActivePage("report_issue"); }} className={`premium-nav-item text-xs font-bold cursor-pointer transition-colors nav-orange ${activePage === "report_issue" ? "active" : ""}`}>Report Issue</button>
-            <button onClick={() => { setActiveRole("citizen"); setActivePage("live_map"); }} className={`premium-nav-item text-xs font-bold cursor-pointer transition-colors nav-purple ${activePage === "live_map" ? "active" : ""}`}>Live Map</button>
-            <button onClick={() => { setActiveRole("citizen"); setActivePage("city_health"); }} className={`premium-nav-item text-xs font-bold cursor-pointer transition-colors nav-rose ${activePage === "city_health" ? "active" : ""}`}>Outages & Statistics</button>
-            <button onClick={() => { setActiveRole("citizen"); setActivePage("ai_assistant"); }} className={`premium-nav-item text-xs font-bold cursor-pointer transition-colors nav-yellow ${activePage === "ai_assistant" ? "active" : ""}`}>AI Assistant</button>
-            <button onClick={() => { setActiveRole("citizen"); setActivePage("my_reports"); }} className={`premium-nav-item text-xs font-bold cursor-pointer transition-colors nav-teal ${activePage === "my_reports" ? "active" : ""}`}>My Complaints</button>
-            <button onClick={() => { setActiveRole("citizen"); setActivePage("profile"); }} className={`premium-nav-item text-xs font-bold cursor-pointer transition-colors nav-pink ${activePage === "profile" ? "active" : ""}`}>Profile</button>
+            <button onClick={() => setActivePage("landing")} className={`premium-nav-item text-xs font-bold cursor-pointer transition-colors nav-blue ${activePage === "landing" ? "active" : ""} ${theme === "dark" ? "text-slate-300 hover:text-white" : "text-slate-600 hover:text-slate-900"}`}>Home</button>
+            <button onClick={() => { setActiveRole("citizen"); setActivePage("dashboard"); }} className={`premium-nav-item text-xs font-bold cursor-pointer transition-colors nav-green ${activePage === "dashboard" ? "active" : ""} ${theme === "dark" ? "text-slate-300 hover:text-white" : "text-slate-600 hover:text-slate-900"}`}>Citizen Hub</button>
+            <button onClick={() => { setActiveRole("citizen"); setActivePage("report_issue"); }} className={`premium-nav-item text-xs font-bold cursor-pointer transition-colors nav-orange ${activePage === "report_issue" ? "active" : ""} ${theme === "dark" ? "text-slate-300 hover:text-white" : "text-slate-600 hover:text-slate-900"}`}>Report Issue</button>
+            <button onClick={() => { setActiveRole("citizen"); setActivePage("live_map"); }} className={`premium-nav-item text-xs font-bold cursor-pointer transition-colors nav-purple ${activePage === "live_map" ? "active" : ""} ${theme === "dark" ? "text-slate-300 hover:text-white" : "text-slate-600 hover:text-slate-900"}`}>Live Map</button>
+            <button onClick={() => { setActiveRole("citizen"); setActivePage("city_health"); }} className={`premium-nav-item text-xs font-bold cursor-pointer transition-colors nav-rose ${activePage === "city_health" ? "active" : ""} ${theme === "dark" ? "text-slate-300 hover:text-white" : "text-slate-600 hover:text-slate-900"}`}>Outages & Statistics</button>
+            <button onClick={() => { setActiveRole("citizen"); setActivePage("ai_assistant"); }} className={`premium-nav-item text-xs font-bold cursor-pointer transition-colors nav-yellow ${activePage === "ai_assistant" ? "active" : ""} ${theme === "dark" ? "text-slate-300 hover:text-white" : "text-slate-600 hover:text-slate-900"}`}>AI Assistant</button>
+            <button onClick={() => { setActiveRole("citizen"); setActivePage("my_reports"); }} className={`premium-nav-item text-xs font-bold cursor-pointer transition-colors nav-teal ${activePage === "my_reports" ? "active" : ""} ${theme === "dark" ? "text-slate-300 hover:text-white" : "text-slate-600 hover:text-slate-900"}`}>My Complaints</button>
+            <button onClick={() => { setActiveRole("citizen"); setActivePage("profile"); }} className={`premium-nav-item text-xs font-bold cursor-pointer transition-colors nav-pink ${activePage === "profile" ? "active" : ""} ${theme === "dark" ? "text-slate-300 hover:text-white" : "text-slate-600 hover:text-slate-900"}`}>Profile</button>
           </div>
 
           {/* DYNAMIC ROLE SELECTOR (SPECTACULAR SEAMLESS TESTING PROTOCOL!) */}
           <div className="hidden sm:flex items-center gap-3">
             
             {/* Nav role select dropdown selector */}
-            <div className="flex items-center bg-slate-100 border border-slate-200 rounded-xl p-1 text-[11px] font-bold gap-1">
+            <div className={`flex items-center rounded-xl p-1 text-[11px] font-bold gap-1 ${theme === "dark" ? "bg-slate-800 border border-slate-700" : "bg-slate-100 border border-slate-200"}`}>
               <button 
                 id="role-btn-citizen"
                 onClick={() => { setActiveRole("citizen"); if (activePage === "landing") setActivePage("dashboard"); }}
-                className={`px-3 py-1.5 rounded-lg border transition-all cursor-pointer ${activeRole === "citizen" ? "bg-white border-slate-200 text-sky-700 font-bold shadow-sm" : "border-transparent text-slate-550 hover:text-slate-900"}`}
+                className={`px-3 py-1.5 rounded-lg border transition-all cursor-pointer ${
+                  activeRole === "citizen" 
+                    ? theme === "dark" 
+                      ? "bg-slate-700 border-slate-600 text-sky-400 font-bold shadow-sm" 
+                      : "bg-white border-slate-200 text-sky-700 font-bold shadow-sm"
+                    : theme === "dark" ? "border-transparent text-slate-400 hover:text-white" : "border-transparent text-slate-550 hover:text-slate-900"
+                }`}
               >
                 Citizen
               </button>
               <button 
                 id="role-btn-worker"
                 onClick={() => { setActiveRole("worker"); }}
-                className={`px-3 py-1.5 rounded-lg border transition-all cursor-pointer ${activeRole === "worker" ? "bg-white border-slate-200 text-emerald-700 font-bold flex items-center gap-1 shadow-sm" : "border-transparent text-slate-550 hover:text-slate-900"}`}
+                className={`px-3 py-1.5 rounded-lg border transition-all cursor-pointer ${
+                  activeRole === "worker" 
+                    ? theme === "dark"
+                      ? "bg-slate-700 border-slate-600 text-emerald-400 font-bold flex items-center gap-1 shadow-sm"
+                      : "bg-white border-slate-200 text-emerald-700 font-bold flex items-center gap-1 shadow-sm"
+                    : theme === "dark" ? "border-transparent text-slate-400 hover:text-white" : "border-transparent text-slate-550 hover:text-slate-900"
+                }`}
               >
-                <Hammer className="w-3.5 h-3.5 text-emerald-500" /> Worker
+                <Hammer className="w-3.5 h-3.5 text-emerald-400" /> Worker
               </button>
               <button 
                 id="role-btn-admin"
                 onClick={() => { setActiveRole("admin"); }}
-                className={`px-3 py-1.5 rounded-lg border transition-all cursor-pointer ${activeRole === "admin" ? "bg-white border-slate-200 text-purple-700 font-bold shadow-sm" : "border-transparent text-slate-550 hover:text-slate-900"}`}
+                className={`px-3 py-1.5 rounded-lg border transition-all cursor-pointer ${
+                  activeRole === "admin" 
+                    ? theme === "dark"
+                      ? "bg-slate-700 border-slate-600 text-purple-400 font-bold shadow-sm"
+                      : "bg-white border-slate-200 text-purple-700 font-bold shadow-sm"
+                    : theme === "dark" ? "border-transparent text-slate-400 hover:text-white" : "border-transparent text-slate-550 hover:text-slate-900"
+                }`}
               >
                 Official
               </button>
@@ -489,7 +525,11 @@ export default function App() {
               <button 
                 id="nav-bell-btn"
                 onClick={() => { setBellOpen(!bellOpen); if (!bellOpen) markAllNotificationsRead(); }}
-                className="p-3 bg-white border border-slate-200 hover:bg-slate-50 text-slate-500 hover:text-slate-800 rounded-xl transition-all cursor-pointer relative shadow-sm"
+                className={`p-3 rounded-xl transition-all cursor-pointer relative shadow-sm border ${
+                  theme === "dark" 
+                    ? "bg-slate-800 border-slate-700 text-slate-200 hover:bg-slate-750" 
+                    : "bg-white border-slate-200 text-slate-500 hover:text-slate-800 hover:bg-slate-50"
+                }`}
               >
                 <Bell className="w-4 h-4" />
                 {notifications.filter(n => !n.read).length > 0 && (
@@ -499,22 +539,26 @@ export default function App() {
 
               {/* Notification drop collapse */}
               {bellOpen && (
-                <div className="absolute right-0 mt-2 w-80 bg-white border border-slate-200 rounded-2xl p-4 shadow-xl z-50 flex flex-col gap-3">
-                  <div className="flex items-center justify-between border-b border-slate-100 pb-2 mb-1">
-                    <span className="text-[10px] font-bold font-mono text-slate-500 uppercase">Incident Broadcast Stream</span>
-                    <button onClick={() => setBellOpen(false)} className="text-[9px] text-slate-400 hover:text-slate-700 font-bold">Close</button>
+                <div className={`absolute right-0 mt-2 w-80 rounded-2xl p-4 shadow-xl z-50 flex flex-col gap-3 border ${
+                  theme === "dark" ? "bg-slate-900 border-slate-700 text-slate-200" : "bg-white border-slate-200 text-slate-800"
+                }`}>
+                  <div className={`flex items-center justify-between border-b pb-2 mb-1 ${theme === "dark" ? "border-slate-800" : "border-slate-100"}`}>
+                    <span className={`text-[10px] font-bold font-mono uppercase ${theme === "dark" ? "text-slate-400" : "text-slate-500"}`}>Incident Broadcast Stream</span>
+                    <button onClick={() => setBellOpen(false)} className="text-[9px] text-slate-400 hover:text-slate-300 font-bold">Close</button>
                   </div>
                   {notifications.length === 0 ? (
                     <p className="text-[10px] text-slate-400">No telemetry warnings.</p>
                   ) : (
                     <div className="flex flex-col gap-3 max-h-60 overflow-y-auto pr-1">
                       {notifications.map((n) => (
-                        <div key={n.id} className="p-2.5 bg-slate-50 rounded-xl text-[11px] leading-snug border border-slate-150 flex flex-col gap-1">
+                        <div key={n.id} className={`p-2.5 rounded-xl text-[11px] leading-snug border flex flex-col gap-1 ${
+                          theme === "dark" ? "bg-slate-800/80 border-slate-750" : "bg-slate-50 border-slate-150"
+                        }`}>
                           <div className="flex items-center gap-1.5">
                             <span className={`w-1.5 h-1.5 rounded-full ${n.type === "success" ? "bg-emerald-500" : n.type === "emergency" ? "bg-rose-500 animate-pulse" : "bg-indigo-500"}`} />
-                            <strong className="text-slate-800">{n.title}</strong>
+                            <strong className={`${theme === "dark" ? "text-slate-200" : "text-slate-800"}`}>{n.title}</strong>
                           </div>
-                          <p className="text-slate-600 font-light">{n.message}</p>
+                          <p className={`${theme === "dark" ? "text-slate-400" : "text-slate-650"} font-light`}>{n.message}</p>
                           <span className="text-[9px] text-slate-400 font-mono mt-0.5">{n.time}</span>
                         </div>
                       ))}
@@ -524,8 +568,29 @@ export default function App() {
               )}
             </div>
 
+            {/* Next-Gen Premium Dark/Light theme mode switch button */}
+            <button 
+              onClick={toggleTheme}
+              className={`p-3 rounded-xl transition-all cursor-pointer relative shadow-sm border flex items-center justify-center font-bold gap-1 ${
+                theme === "dark"
+                  ? "bg-slate-800 border-slate-700 text-amber-400 hover:bg-slate-700 hover:scale-105"
+                  : "bg-white border-slate-200 text-slate-500 hover:text-indigo-600 hover:bg-slate-50 hover:scale-105"
+              }`}
+              title={theme === "light" ? "Switch to Cyber Dark Mode" : "Switch to Premium Light Mode"}
+            >
+              {theme === "light" ? (
+                <Moon className="w-4 h-4 text-indigo-500" />
+              ) : (
+                <Sun className="w-4 h-4 text-amber-400 animate-spin-slow" />
+              )}
+            </button>
+
             {/* Profile Avatar identifier */}
-            <div className="w-10 h-10 bg-sky-50 text-sky-700 font-black flex items-center justify-center rounded-xl border border-sky-100 cursor-pointer hover:bg-sky-100 transition-all shadow-sm" onClick={() => setActivePage("profile")}>
+            <div className={`w-10 h-10 font-black flex items-center justify-center rounded-xl cursor-pointer transition-all shadow-sm border ${
+              theme === "dark" 
+                ? "bg-slate-800 border-slate-700 text-sky-400 hover:bg-slate-750 hover:text-white"
+                : "bg-sky-50 text-sky-700 border-sky-100 hover:bg-sky-100"
+            }`} onClick={() => setActivePage("profile")}>
               AM
             </div>
 
@@ -534,7 +599,7 @@ export default function App() {
           {/* Mobile Menu Action trigger */}
           <button 
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-            className="lg:hidden p-2 text-slate-400 hover:text-slate-800 cursor-pointer"
+            className={`lg:hidden p-2 cursor-pointer transition-colors ${theme === "dark" ? "text-slate-200 hover:text-white" : "text-slate-400 hover:text-slate-800"}`}
           >
             {mobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
           </button>
@@ -544,26 +609,28 @@ export default function App() {
 
       {/* MOBILE COLLAPSIBILITY NAVIGATION MENU OVERLAY */}
       {mobileMenuOpen && (
-        <div className="fixed inset-0 top-[60px] z-30 bg-white/95 backdrop-blur-md flex flex-col p-6 gap-6 lg:hidden border-b border-slate-200 text-slate-600 font-light overflow-y-auto shadow-lg animate-fade-in">
+        <div className={`fixed inset-0 top-[60px] z-30 backdrop-blur-md flex flex-col p-6 gap-6 lg:hidden border-b overflow-y-auto shadow-lg animate-fade-in ${
+          theme === "dark" ? "bg-slate-900/95 text-slate-350 border-slate-800" : "bg-white/95 text-slate-600 border-slate-200"
+        }`}>
           
           {/* Main Links */}
           <div className="flex flex-col gap-4 text-sm font-bold uppercase tracking-wider">
-            <button onClick={() => { setActivePage("landing"); setMobileMenuOpen(false); }} className="text-left w-full hover:text-slate-950">Home Landing</button>
-            <button onClick={() => { setActiveRole("citizen"); setActivePage("dashboard"); setMobileMenuOpen(false); }} className="text-left w-full hover:text-slate-955">Citizen Dashboard</button>
-            <button onClick={() => { setActiveRole("citizen"); setActivePage("report_issue"); setMobileMenuOpen(false); }} className="text-left w-full hover:text-slate-955">Report Issue</button>
-            <button onClick={() => { setActiveRole("citizen"); setActivePage("live_map"); setMobileMenuOpen(false); }} className="text-left w-full hover:text-slate-955">See Live Map</button>
-            <button onClick={() => { setActiveRole("citizen"); setActivePage("ai_assistant"); setMobileMenuOpen(false); }} className="text-left w-full hover:text-slate-955">CityGPT AI Assistant</button>
-            <button onClick={() => { setActiveRole("citizen"); setActivePage("my_reports"); setMobileMenuOpen(false); }} className="text-left w-full hover:text-slate-955">My Complaints</button>
-            <button onClick={() => { setActiveRole("citizen"); setActivePage("profile"); setMobileMenuOpen(false); }} className="text-left w-full hover:text-slate-955">Profile Credentials</button>
+            <button onClick={() => { setActivePage("landing"); setMobileMenuOpen(false); }} className={`text-left w-full ${theme === "dark" ? "hover:text-white text-slate-200" : "hover:text-slate-950 text-slate-700"}`}>Home Landing</button>
+            <button onClick={() => { setActiveRole("citizen"); setActivePage("dashboard"); setMobileMenuOpen(false); }} className={`text-left w-full ${theme === "dark" ? "hover:text-white text-slate-200" : "hover:text-slate-950 text-slate-700"}`}>Citizen Dashboard</button>
+            <button onClick={() => { setActiveRole("citizen"); setActivePage("report_issue"); setMobileMenuOpen(false); }} className={`text-left w-full ${theme === "dark" ? "hover:text-white text-slate-200" : "hover:text-slate-950 text-slate-700"}`}>Report Issue</button>
+            <button onClick={() => { setActiveRole("citizen"); setActivePage("live_map"); setMobileMenuOpen(false); }} className={`text-left w-full ${theme === "dark" ? "hover:text-white text-slate-200" : "hover:text-slate-950 text-slate-700"}`}>See Live Map</button>
+            <button onClick={() => { setActiveRole("citizen"); setActivePage("ai_assistant"); setMobileMenuOpen(false); }} className={`text-left w-full ${theme === "dark" ? "hover:text-white text-slate-200" : "hover:text-slate-950 text-slate-700"}`}>CityGPT AI Assistant</button>
+            <button onClick={() => { setActiveRole("citizen"); setActivePage("my_reports"); setMobileMenuOpen(false); }} className={`text-left w-full ${theme === "dark" ? "hover:text-white text-slate-200" : "hover:text-slate-955 text-slate-700"}`}>My Complaints</button>
+            <button onClick={() => { setActiveRole("citizen"); setActivePage("profile"); setMobileMenuOpen(false); }} className={`text-left w-full ${theme === "dark" ? "hover:text-white text-slate-200" : "hover:text-slate-955 text-slate-700"}`}>Profile Credentials</button>
           </div>
 
           {/* Quick Role Selectors */}
-          <div className="pt-6 border-t border-slate-200">
+          <div className={`pt-6 border-t ${theme === "dark" ? "border-slate-800" : "border-slate-200"}`}>
             <p className="text-[10px] font-mono text-slate-400 uppercase tracking-widest mb-3 font-bold">Testing Role simulation</p>
             <div className="grid grid-cols-3 gap-2">
-              <button onClick={() => { setActiveRole("citizen"); setActivePage("dashboard"); setMobileMenuOpen(false); }} className={`py-2 rounded-xl text-xs font-bold ${activeRole === "citizen" ? "bg-sky-600 text-white" : "bg-slate-100"}`}>Citizen</button>
-              <button onClick={() => { setActiveRole("worker"); setMobileMenuOpen(false); }} className={`py-2 rounded-xl text-xs font-bold ${activeRole === "worker" ? "bg-emerald-600 text-white" : "bg-slate-100"}`}>Worker</button>
-              <button onClick={() => { setActiveRole("admin"); setMobileMenuOpen(false); }} className={`py-2 rounded-xl text-xs font-bold ${activeRole === "admin" ? "bg-purple-600 text-white" : "bg-slate-100"}`}>Official</button>
+              <button onClick={() => { setActiveRole("citizen"); setActivePage("dashboard"); setMobileMenuOpen(false); }} className={`py-2 rounded-xl text-xs font-bold ${activeRole === "citizen" ? "bg-sky-650 text-white" : theme === "dark" ? "bg-slate-800 text-slate-300" : "bg-slate-100"}`}>Citizen</button>
+              <button onClick={() => { setActiveRole("worker"); setMobileMenuOpen(false); }} className={`py-2 rounded-xl text-xs font-bold ${activeRole === "worker" ? "bg-emerald-650 text-white" : theme === "dark" ? "bg-slate-800 text-slate-300" : "bg-slate-100"}`}>Worker</button>
+              <button onClick={() => { setActiveRole("admin"); setMobileMenuOpen(false); }} className={`py-2 rounded-xl text-xs font-bold ${activeRole === "admin" ? "bg-purple-650 text-white" : theme === "dark" ? "bg-slate-800 text-slate-300" : "bg-slate-100"}`}>Official</button>
             </div>
           </div>
         </div>
@@ -583,16 +650,18 @@ export default function App() {
       )}
 
       {/* PERSISTENT STRUCTURAL FOOTER */}
-      <footer className="bg-white border-t border-slate-200 py-8 relative z-10 text-slate-500 font-light">
+      <footer className={`border-t py-8 relative z-10 font-light transition-colors duration-200 ${
+        theme === "dark" ? "bg-slate-900 border-slate-800/80 text-slate-400" : "bg-white border-slate-200 py-8 text-slate-500"
+      }`}>
         <div className="max-w-7xl mx-auto px-6 flex flex-col md:flex-row items-center justify-between gap-4 text-[11px]">
           <div>
-            <span className="font-bold block text-slate-800">© 2026 CityGPT Municipal Network Control</span>
+            <span className={`font-bold block ${theme === "dark" ? "text-slate-200" : "text-slate-800"}`}>© 2026 CityGPT Municipal Network Control</span>
             <span>Real-time Smart City Framework. All node components compiled successfully.</span>
           </div>
           <div className="flex gap-4.5 text-slate-400 font-bold">
-            <span className="cursor-pointer hover:text-slate-650">Subsidy Subscriptions</span>
-            <span className="cursor-pointer hover:text-slate-650">Telemetry safety rules</span>
-            <span className="cursor-pointer hover:text-slate-650">Smart API Licences</span>
+            <span className="cursor-pointer hover:text-slate-300">Subsidy Subscriptions</span>
+            <span className="cursor-pointer hover:text-slate-300">Telemetry safety rules</span>
+            <span className="cursor-pointer hover:text-slate-300">Smart API Licences</span>
           </div>
         </div>
       </footer>

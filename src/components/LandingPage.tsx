@@ -11,6 +11,8 @@ interface LandingPageProps {
   onNavigate: (page: string) => void;
   onSetRole: (role: "citizen" | "worker" | "admin") => void;
   cityHealth: number;
+  isDarkMode?: boolean;
+  onToggleTheme?: () => void;
 }
 
 // Sample dataset for our interactive inline Google-Maps-style widget
@@ -88,7 +90,13 @@ const MAP_SAMPLES: MapSample[] = [
   }
 ];
 
-export default function LandingPage({ onNavigate, onSetRole, cityHealth }: LandingPageProps) {
+export default function LandingPage({ 
+  onNavigate, 
+  onSetRole, 
+  cityHealth,
+  isDarkMode = false,
+  onToggleTheme
+}: LandingPageProps) {
   const [demoOpen, setDemoOpen] = useState(false);
   const [faqOpen, setFaqOpen] = useState<number | null>(null);
   const [activeFaqTab, setActiveFaqTab] = useState<string>("all");
@@ -163,14 +171,14 @@ export default function LandingPage({ onNavigate, onSetRole, cityHealth }: Landi
   });
 
   return (
-    <div className="relative min-h-screen bg-[#F8FAFC] text-slate-800 overflow-x-hidden font-sans selection:bg-indigo-500/10 selection:text-indigo-900">
+    <div className={`relative min-h-screen transition-colors duration-300 ${isDarkMode ? "bg-slate-950 text-slate-100" : "bg-[#F8FAFC] text-slate-800"} overflow-x-hidden font-sans selection:bg-indigo-500/10 selection:text-indigo-900`}>
       
       {/* Dynamic light mesh grid background pattern */}
       <div className="absolute inset-0 z-0 pointer-events-none overflow-hidden">
         {/* Soft elegant light mesh gradients */}
-        <div className="absolute top-[-10%] left-[-20%] w-[90%] h-[70%] rounded-full bg-gradient-to-br from-indigo-100/50 via-purple-50/30 to-transparent blur-[140px]" />
-        <div className="absolute top-[20%] right-[-25%] w-[80%] h-[80%] rounded-full bg-gradient-to-bl from-blue-100/40 via-violet-50/20 to-transparent blur-[150px]" />
-        <div className="absolute bottom-[10%] left-[-15%] w-[70%] h-[70%] rounded-full bg-gradient-to-tr from-cyan-50/30 via-slate-100/20 to-transparent blur-[120px]" />
+        <div className={`absolute top-[-10%] left-[-20%] w-[90%] h-[70%] rounded-full blur-[140px] transition-colors duration-350 ${isDarkMode ? "bg-gradient-to-br from-indigo-950/40 via-purple-950/20 to-transparent" : "bg-gradient-to-br from-indigo-100/50 via-purple-50/30 to-transparent"}`} />
+        <div className={`absolute top-[20%] right-[-25%] w-[80%] h-[80%] rounded-full blur-[150px] transition-colors duration-350 ${isDarkMode ? "bg-gradient-to-bl from-blue-950/50 via-violet-900/10 to-transparent" : "bg-gradient-to-bl from-blue-100/40 via-violet-50/20 to-transparent"}`} />
+        <div className={`absolute bottom-[10%] left-[-15%] w-[70%] h-[70%] rounded-full blur-[120px] transition-colors duration-350 ${isDarkMode ? "bg-gradient-to-tr from-cyan-950/30 via-slate-950/20 to-transparent" : "bg-gradient-to-tr from-cyan-50/30 via-slate-100/20 to-transparent"}`} />
 
         {/* Crisp grid lines mimicking elegant modern architecture */}
         <div className="absolute inset-0 bg-[radial-gradient(rgba(99,102,241,0.04)_1.5px,transparent_1.5px)] [background-size:24px_24px] opacity-85" />
@@ -178,7 +186,11 @@ export default function LandingPage({ onNavigate, onSetRole, cityHealth }: Landi
 
       {/* TOP FLOATING NAVBAR */}
       <header className="sticky top-4 z-50 mx-auto max-w-7xl px-4 sm:px-6">
-        <nav className="bg-white/80 backdrop-blur-2xl border border-slate-200/80 rounded-full px-6 py-3.5 flex items-center justify-between shadow-xl shadow-slate-200/40 relative">
+        <nav className={`backdrop-blur-2xl border rounded-full px-6 py-3.5 flex items-center justify-between transition-all duration-300 ${
+          isDarkMode 
+            ? "bg-slate-900/85 border-slate-800/80 shadow-2xl shadow-slate-950/40" 
+            : "bg-white/80 border-slate-200/80 shadow-xl shadow-slate-200/40"
+        } relative`}>
           
           {/* Logo brand */}
           <div className="flex items-center gap-2.5 cursor-pointer group" onClick={() => onNavigate("landing")}>
@@ -340,9 +352,17 @@ export default function LandingPage({ onNavigate, onSetRole, cityHealth }: Landi
                 transform: `perspective(1000px) rotateX(${-mousePos.y * 14}deg) rotateY(${mousePos.x * 14}deg) scale(${1 + scrollProgress * 0.04})`,
                 transition: "transform 0.15s cubic-bezier(0.25, 1, 0.5, 1)"
               }}
-              className="relative w-full max-w-xl aspect-[11/10] bg-white/40 backdrop-blur-xl rounded-[2.5rem] p-2 border border-white/50 shadow-2xl overflow-visible group flex items-center justify-center"
+              className={`relative w-full max-w-xl aspect-[11/10] backdrop-blur-xl rounded-[2.5rem] p-2 border shadow-2xl overflow-visible group flex items-center justify-center transition-all duration-300 ${
+                isDarkMode 
+                  ? "bg-slate-900/40 border-slate-800/80 shadow-slate-950/50" 
+                  : "bg-white/40 border-white/50 shadow-slate-200/50"
+              }`}
             >
-              <div className="relative w-full h-full bg-gradient-to-b from-white/90 via-slate-50/50 to-white/95 rounded-[2.3rem] overflow-hidden p-2 flex items-center justify-center border border-slate-100">
+              <div className={`relative w-full h-full rounded-[2.3rem] overflow-hidden p-2 flex items-center justify-center border transition-all duration-300 ${
+                isDarkMode 
+                  ? "bg-gradient-to-b from-slate-955/95 via-slate-900/60 to-slate-955/95 border-slate-800/80" 
+                  : "bg-gradient-to-b from-white/90 via-slate-50/50 to-white/95 border-slate-100"
+              }`}>
                 
                 {/* SVG 3D Isometric suspended Island, Buildings & Infrastructure Canvas */}
                 <svg className="absolute inset-0 w-full h-full overflow-hidden" viewBox="0 0 600 550" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -670,21 +690,27 @@ export default function LandingPage({ onNavigate, onSetRole, cityHealth }: Landi
                 </svg>
 
                 {/* 10. PREMIUM INTERACTIVE GLASSMORPHIC CARDS ORBITING THEREOF */}
-                
+
                 {/* CARD 1: 💧 Water Leak (Top Left) */}
                 <div 
                   style={{
                     transform: `perspective(1000px) rotateX(${mousePos.y * 10}deg) rotateY(${-mousePos.x * 10}deg)`,
                     transition: "transform 0.2s ease-out"
                   }}
-                  className="absolute top-2 left-2 bg-white/75 backdrop-blur-xl border border-white/60 p-3 rounded-2xl flex items-center gap-3 shadow-xl hover:shadow-cyan-400/25 hover:scale-105 hover:bg-white/85 transition-all duration-300 animate-float-slow select-none cursor-pointer"
+                  className={`absolute top-2 left-2 backdrop-blur-xl border p-3 rounded-2xl flex items-center gap-3 shadow-xl hover:scale-105 transition-all duration-300 animate-float-slow select-none cursor-pointer ${
+                    isDarkMode 
+                      ? "bg-slate-900/80 border-cyan-500/30 text-white hover:bg-slate-850 hover:shadow-cyan-400/20" 
+                      : "bg-white/75 border-white/60 text-slate-800 hover:bg-white/85 hover:shadow-cyan-400/25"
+                  }`}
                 >
-                  <div className="w-9 h-9 rounded-xl bg-cyan-50 text-cyan-500 border border-cyan-150 flex items-center justify-center shadow-inner animate-pulse">
-                    <Radio className="w-4.5 h-4.5" />
+                  <div className={`w-9 h-9 rounded-xl flex items-center justify-center shadow-inner ${
+                    isDarkMode ? "bg-cyan-950/80 text-cyan-400 border border-cyan-500/20" : "bg-cyan-50 text-cyan-500 border border-cyan-150"
+                  }`}>
+                    <Radio className="w-4.5 h-4.5 animate-pulse" />
                   </div>
                   <div className="text-left">
-                    <p className="text-[9px] text-slate-400 font-mono font-bold uppercase tracking-widest">💧 Water Leak</p>
-                    <p className="text-xs font-black text-slate-800 font-display">Priority High</p>
+                    <p className={`text-[9px] font-mono font-bold uppercase tracking-widest ${isDarkMode ? "text-cyan-400" : "text-slate-450"}`}>💧 Water Leak</p>
+                    <p className={`text-xs font-black font-display ${isDarkMode ? "text-slate-200" : "text-slate-800"}`}>Priority High</p>
                   </div>
                 </div>
 
@@ -694,14 +720,20 @@ export default function LandingPage({ onNavigate, onSetRole, cityHealth }: Landi
                     transform: `perspective(1000px) rotateX(${mousePos.y * 10}deg) rotateY(${-mousePos.x * 10}deg)`,
                     transition: "transform 0.2s ease-out"
                   }}
-                  className="absolute bottom-2 left-2 bg-white/75 backdrop-blur-xl border border-white/60 p-3 rounded-2xl flex items-center gap-3 shadow-xl hover:shadow-purple-400/25 hover:scale-105 hover:bg-white/85 transition-all duration-300 animate-float-medium select-none cursor-pointer"
+                  className={`absolute bottom-2 left-2 backdrop-blur-xl border p-3 rounded-2xl flex items-center gap-3 shadow-xl hover:scale-105 transition-all duration-300 animate-float-medium select-none cursor-pointer ${
+                    isDarkMode 
+                      ? "bg-slate-900/80 border-purple-500/30 text-white hover:bg-slate-850 hover:shadow-purple-400/20" 
+                      : "bg-white/75 border-white/60 text-slate-800 hover:bg-white/85 hover:shadow-purple-400/25"
+                  }`}
                 >
-                  <div className="w-9 h-9 rounded-xl bg-purple-50 text-purple-600 border border-purple-150 flex items-center justify-center shadow-inner">
+                  <div className={`w-9 h-9 rounded-xl flex items-center justify-center shadow-inner ${
+                    isDarkMode ? "bg-purple-950/80 text-purple-400 border border-purple-500/20" : "bg-purple-50 text-purple-600 border border-purple-150"
+                  }`}>
                     <Users className="w-4.5 h-4.5" />
                   </div>
                   <div className="text-left">
-                    <p className="text-[9px] text-slate-400 font-mono font-bold uppercase tracking-widest">🚮 Waste Overflow</p>
-                    <p className="text-xs font-black text-purple-700 font-display">Team Assigned</p>
+                    <p className={`text-[9px] font-mono font-bold uppercase tracking-widest ${isDarkMode ? "text-purple-400" : "text-slate-450"}`}>🚮 Waste Overflow</p>
+                    <p className={`text-xs font-black font-display ${isDarkMode ? "text-purple-305" : "text-purple-700"}`}>Team Assigned</p>
                   </div>
                 </div>
 
@@ -711,14 +743,20 @@ export default function LandingPage({ onNavigate, onSetRole, cityHealth }: Landi
                     transform: `perspective(1000px) rotateX(${mousePos.y * 10}deg) rotateY(${-mousePos.x * 10}deg)`,
                     transition: "transform 0.2s ease-out"
                   }}
-                  className="absolute top-2 right-2 bg-white/75 backdrop-blur-xl border border-white/60 p-3 rounded-2xl flex items-center gap-3 shadow-xl hover:shadow-yellow-400/25 hover:scale-105 hover:bg-white/85 transition-all duration-300 animate-float-fast select-none cursor-pointer"
+                  className={`absolute top-2 right-2 backdrop-blur-xl border p-3 rounded-2xl flex items-center gap-3 shadow-xl hover:scale-105 transition-all duration-300 animate-float-fast select-none cursor-pointer ${
+                    isDarkMode 
+                      ? "bg-slate-900/80 border-yellow-500/30 text-white hover:bg-slate-850 hover:shadow-yellow-400/20" 
+                      : "bg-white/75 border-white/60 text-slate-800 hover:bg-white/85 hover:shadow-yellow-400/25"
+                  }`}
                 >
-                  <div className="w-9 h-9 rounded-xl bg-yellow-50 text-amber-500 border border-yellow-150 flex items-center justify-center shadow-inner">
+                  <div className={`w-9 h-9 rounded-xl flex items-center justify-center shadow-inner ${
+                    isDarkMode ? "bg-yellow-950/80 text-amber-400 border border-yellow-500/20" : "bg-yellow-50 text-amber-500 border border-yellow-150"
+                  }`}>
                     <Check className="w-4.5 h-4.5 font-bold" />
                   </div>
                   <div className="text-left">
-                    <p className="text-[9px] text-slate-400 font-mono font-bold uppercase tracking-widest">💡 Street Light</p>
-                    <p className="text-xs font-black text-amber-600 font-display">Resolved</p>
+                    <p className={`text-[9px] font-mono font-bold uppercase tracking-widest ${isDarkMode ? "text-amber-405" : "text-slate-450"}`}>💡 Street Light</p>
+                    <p className={`text-xs font-black font-display ${isDarkMode ? "text-amber-300" : "text-amber-600"}`}>Resolved</p>
                   </div>
                 </div>
 
@@ -728,14 +766,20 @@ export default function LandingPage({ onNavigate, onSetRole, cityHealth }: Landi
                     transform: `perspective(1000px) rotateX(${mousePos.y * 10}deg) rotateY(${-mousePos.x * 10}deg)`,
                     transition: "transform 0.2s ease-out"
                   }}
-                  className="absolute bottom-12 right-2 bg-white/75 backdrop-blur-xl border border-white/60 p-3 rounded-2xl flex items-center gap-3 shadow-xl hover:shadow-rose-400/25 hover:scale-105 hover:bg-white/85 transition-all duration-300 animate-float-slow select-none cursor-pointer"
+                  className={`absolute bottom-12 right-2 backdrop-blur-xl border p-3 rounded-2xl flex items-center gap-3 shadow-xl hover:scale-105 transition-all duration-300 animate-float-slow select-none cursor-pointer ${
+                    isDarkMode 
+                      ? "bg-slate-900/80 border-rose-500/30 text-white hover:bg-slate-850 hover:shadow-rose-400/20" 
+                      : "bg-white/75 border-white/60 text-slate-800 hover:bg-white/85 hover:shadow-rose-400/25"
+                  }`}
                 >
-                  <div className="w-9 h-9 rounded-xl bg-rose-50 text-rose-500 border border-rose-150 flex items-center justify-center shadow-inner animate-pulse">
-                    <Activity className="w-4.5 h-4.5" />
+                  <div className={`w-9 h-9 rounded-xl flex items-center justify-center shadow-inner ${
+                    isDarkMode ? "bg-rose-950/80 text-rose-400 border border-rose-500/20" : "bg-rose-50 text-rose-500 border border-rose-150"
+                  }`}>
+                    <Activity className="w-4.5 h-4.5 animate-pulse" />
                   </div>
                   <div className="text-left">
-                    <p className="text-[9px] text-slate-400 font-mono font-bold uppercase tracking-widest">🚦 Traffic Node</p>
-                    <p className="text-xs font-black text-rose-600 font-display">Heavy Congestion</p>
+                    <p className={`text-[9px] font-mono font-bold uppercase tracking-widest ${isDarkMode ? "text-rose-400" : "text-slate-450"}`}>🚦 Traffic Node</p>
+                    <p className={`text-xs font-black font-display ${isDarkMode ? "text-rose-300" : "text-rose-600"}`}>Heavy Congestion</p>
                   </div>
                 </div>
 
@@ -745,14 +789,20 @@ export default function LandingPage({ onNavigate, onSetRole, cityHealth }: Landi
                     transform: `perspective(1000px) rotateX(${mousePos.y * 10}deg) rotateY(${-mousePos.x * 10}deg)`,
                     transition: "transform 0.2s ease-out"
                   }}
-                  className="absolute bottom-2 left-1/3 -translate-x-1/12 bg-white/75 backdrop-blur-xl border border-white/60 p-2.5 rounded-2xl flex items-center gap-2.5 shadow-xl hover:shadow-emerald-400/25 hover:scale-105 hover:bg-white/85 transition-all duration-300 animate-float-medium select-none cursor-pointer"
+                  className={`absolute bottom-2 left-1/3 -translate-x-1/12 backdrop-blur-xl border p-2.5 rounded-2xl flex items-center gap-2.5 shadow-xl hover:scale-105 transition-all duration-300 animate-float-medium select-none cursor-pointer ${
+                    isDarkMode 
+                      ? "bg-slate-900/80 border-emerald-500/30 text-white hover:bg-slate-850 hover:shadow-emerald-400/20" 
+                      : "bg-white/75 border-white/60 text-slate-800 hover:bg-white/85 hover:shadow-emerald-400/25"
+                  }`}
                 >
-                  <div className="w-8 h-8 rounded-xl bg-emerald-50 text-emerald-550 border border-emerald-150 flex items-center justify-center">
-                    <Zap className="w-4 h-4 animate-bounce text-emerald-500" />
+                  <div className={`w-8 h-8 rounded-xl flex items-center justify-center ${
+                    isDarkMode ? "bg-emerald-950/80 text-emerald-400 border border-emerald-500/20" : "bg-emerald-50 text-emerald-550 border border-emerald-150"
+                  }`}>
+                    <Zap className="w-4 h-4 animate-bounce" />
                   </div>
                   <div className="text-left">
-                    <p className="text-[9px] text-slate-400 font-mono font-bold uppercase tracking-wider">⚡ Grid Substation</p>
-                    <p className="text-[11px] font-black text-emerald-600">Active Repair</p>
+                    <p className={`text-[9px] font-mono font-bold uppercase tracking-wider ${isDarkMode ? "text-emerald-400" : "text-slate-450"}`}>⚡ Grid Substation</p>
+                    <p className={`text-[11px] font-black ${isDarkMode ? "text-emerald-300" : "text-emerald-600"}`}>Active Repair</p>
                   </div>
                 </div>
 
@@ -762,14 +812,20 @@ export default function LandingPage({ onNavigate, onSetRole, cityHealth }: Landi
                     transform: `perspective(1000px) rotateX(${mousePos.y * 10}deg) rotateY(${-mousePos.x * 10}deg)`,
                     transition: "transform 0.2s ease-out"
                   }}
-                  className="absolute top-1/3 left-2 bg-white/75 backdrop-blur-xl border border-white/60 p-2.5 rounded-2xl flex items-center gap-2.5 shadow-xl hover:shadow-green-400/25 hover:scale-105 hover:bg-white/85 transition-all duration-300 animate-float-fast select-none cursor-pointer"
+                  className={`absolute top-1/3 left-2 backdrop-blur-xl border p-2.5 rounded-2xl flex items-center gap-2.5 shadow-xl hover:scale-105 transition-all duration-300 animate-float-fast select-none cursor-pointer ${
+                    isDarkMode 
+                      ? "bg-slate-900/80 border-green-500/30 text-white hover:bg-slate-850 hover:shadow-green-400/20" 
+                      : "bg-white/75 border-white/60 text-slate-800 hover:bg-white/85 hover:shadow-green-400/25"
+                  }`}
                 >
-                  <div className="w-8 h-8 rounded-xl bg-green-50 text-emerald-500 border border-green-150 flex items-center justify-center">
-                    <AlertCircle className="w-4 h-4 text-emerald-500" />
+                  <div className={`w-8 h-8 rounded-xl flex items-center justify-center ${
+                    isDarkMode ? "bg-emerald-950/80 text-emerald-405 border border-emerald-500/20" : "bg-green-50 text-emerald-500 border border-green-150"
+                  }`}>
+                    <AlertCircle className="w-4 h-4" />
                   </div>
                   <div className="text-left">
-                    <p className="text-[9px] text-slate-400 font-mono font-bold uppercase tracking-wider">🌳 Fallen Tree</p>
-                    <p className="text-[11px] font-black text-emerald-700">En Route</p>
+                    <p className={`text-[9px] font-mono font-bold uppercase tracking-wider ${isDarkMode ? "text-emerald-405" : "text-slate-450"}`}>🌳 Fallen Tree</p>
+                    <p className={`text-[11px] font-black ${isDarkMode ? "text-emerald-300" : "text-emerald-700"}`}>En Route</p>
                   </div>
                 </div>
 
