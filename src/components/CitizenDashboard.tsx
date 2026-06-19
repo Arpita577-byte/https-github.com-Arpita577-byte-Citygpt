@@ -1,6 +1,9 @@
-import React from "react";
-import { motion } from "motion/react";
-import { Camera, MapPin, Brain, History, Bell, Trophy, Activity, User, AlertCircle, Sparkles, Check, ChevronRight } from "lucide-react";
+import React, { useState } from "react";
+import { motion, AnimatePresence } from "motion/react";
+import { 
+  Camera, MapPin, Brain, History, Bell, Trophy, Activity, User, 
+  AlertCircle, Sparkles, Check, ChevronRight, MessageSquare, Send, Mic, HelpCircle, Eye, ShieldAlert 
+} from "lucide-react";
 import { Complaint, RewardPointInfo, CityNotification } from "../types";
 
 interface CitizenDashboardProps {
@@ -28,290 +31,630 @@ export default function CitizenDashboard({
   // Calculate analytics
   const totalReportsCount = complaints.length;
   const resolvedCount = complaints.filter(c => c.status === "resolved").length;
-  const pendingCount = totalReportsCount - resolvedCount;
   const unreadNotifs = notifications.filter(n => !n.read).length;
 
-  // Filter the first 3 recent complaints for the bottom section
-  const recentComplaints = complaints.slice(0, 3);
+  // Selected complaint state to feed the detailed right tracker panel!
+  const [selectedComplaintId, setSelectedComplaintId] = useState<string>(
+    complaints.length > 0 ? complaints[0].id : ""
+  );
+
+  // Map point filter category state
+  const [mapFilter, setMapFilter] = useState<string>("All");
+
+  // AI Assistant embedded conversational state
+  const [chatInput, setChatInput] = useState("");
+  const [chatMessages, setChatMessages] = useState<Array<{ sender: "user" | "bot"; text: string }>>([
+    { sender: "bot", text: "Hello Arpita! I am CityGPT Assistant. How can I assist you with municipal grids, outages or report diagnostics today?" }
+  ]);
+
+  // Handle embedded chat submit
+  const handleChatSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!chatInput.trim()) return;
+
+    const userText = chatInput;
+    setChatMessages(prev => [...prev, { sender: "user", text: userText }]);
+    setChatInput("");
+
+    // Simulate smart responses based on keywords in light theme style
+    setTimeout(() => {
+      let botResponse = "I have queried the digital twin grid repository. Ward-3 reports are operating under high priority. Let me know if you would like me to escalate any pending tickets.";
+      const query = userText.toLowerCase();
+      if (query.includes("garbage") || query.includes("waste")) {
+        botResponse = "There are currently 4 active Garbage Outages in Ward-3. Team 4 is on-site at School Road with a 25-minute ETA.";
+      } else if (query.includes("water") || query.includes("leak")) {
+        botResponse = "A major water main pressure leakage was flagged near MG Road. Ground acoustic nodes are active. Dispatch dispatched to S-3 plumbers.";
+      } else if (query.includes("pothole") || query.includes("road")) {
+        botResponse = "Two critical road potholes are listed near Shalimar Bagh. AI computer vision has mapped them; repairs are on the weekend backlog.";
+      } else if (query.includes("light") || query.includes("street")) {
+        botResponse = "3 continuous black lanes are flagged at Rohini Block C. AI predicted a transformer trip; utility technicians reset is scheduled within 2 hours.";
+      }
+      setChatMessages(prev => [...prev, { sender: "bot", text: botResponse }]);
+    }, 700);
+  };
+
+  // Quick suggestion clicks for mini AI Assistant
+  const handleQuickAiQuery = (query: string) => {
+    setChatMessages(prev => [...prev, { sender: "user", text: query }]);
+    setTimeout(() => {
+      let response = "Based on GIS telemetry logs, there are 8 open reports active in Delhi North. Your neighborhood satisfaction level stays above 95%.";
+      if (query.includes("garbage")) {
+        response = "There are 3 open garbage complaints in your immediate ward. Team 4 has already accepted the automated dispatch.";
+      }
+      setChatMessages(prev => [...prev, { sender: "bot", text: response }]);
+    }, 600);
+  };
+
+  // Get current active selected complaint
+  const activeComplaint = complaints.find(c => c.id === selectedComplaintId) || complaints[0];
 
   return (
-    <div className="max-w-7xl mx-auto px-6 pt-24 pb-16 text-neutral-100 font-sans">
+    <div className="max-w-7xl mx-auto px-6 pt-24 pb-16 text-slate-800 font-sans">
       
-      {/* Top Welcome block */}
-      <div className="grid grid-cols-1 md:grid-cols-12 gap-6 items-end mb-8 border-b border-sky-500/10 pb-6">
-        
-        {/* Welcome Text */}
-        <div className="md:col-span-8 flex flex-col gap-1.5">
-          <div className="flex items-center gap-2">
-            <span className="text-[10px] font-mono bg-sky-950/40 text-sky-400 border border-sky-500/15 px-2.5 py-1 rounded">
-              SMART CITIZEN ACCESS PANEL
-            </span>
-            <span className="text-[10px] text-neutral-500 font-mono hidden sm:inline">{userEmail}</span>
-          </div>
-          <h2 className="text-3xl font-extrabold tracking-tight text-white font-display">
-            Good Evening 👋
-          </h2>
-          <p className="text-xs text-neutral-400 font-light">
-            Municipal telemetry points synchronized. Verify resolutions to maintain community efficiency benchmarks.
+      {/* 1. Header greeting section */}
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-6 border-b border-slate-100 pb-6 mb-8">
+        <div>
+          <span className="text-[11px] font-bold text-sky-600 bg-sky-50 border border-sky-100 px-3 py-1 rounded-full uppercase tracking-wider mb-2 inline-block">
+            MUNICIPAL CONTROL CENTRAL
+          </span>
+          <h1 className="text-3xl font-extrabold tracking-tight text-slate-900 font-display">
+            Good Morning, {userName} 👋
+          </h1>
+          <p className="text-xs text-slate-500 font-normal mt-1">
+            Let's make our city better together. Telemetry nodes synchronized.
           </p>
         </div>
 
-        {/* SOS Immediate Emergency Trigger */}
-        <div className="md:col-span-4 flex items-center justify-end w-full">
+        <div className="flex items-center gap-3">
           <button 
-            id="dash-sos-btn"
+            id="sos-button-dash"
             onClick={onSosToggle}
-            className="w-full sm:w-auto flex items-center justify-center gap-2 px-6 py-3 bg-rose-600/20 hover:bg-rose-600 text-rose-400 hover:text-white border border-rose-500/25 rounded-xl font-bold cursor-pointer transition-all duration-300 animate-pulse shadow-lg shadow-rose-600/10"
+            className="flex items-center justify-center gap-2 px-5 py-3 bg-rose-50 hover:bg-rose-100 text-rose-600 border border-rose-200 rounded-full font-bold text-xs transition-all cursor-pointer animate-pulse shadow-sm"
           >
-            <AlertCircle className="w-4 h-4" />
-            SOS EMERGENCY
+            <AlertCircle className="w-4 h-4 text-rose-500" />
+            SOS EMERGENCY TRIPPED
           </button>
         </div>
-
       </div>
 
-      {/* City Health Index Gauge Card (CRED Style) */}
-      <div className="mb-10">
-        <div className="bg-gradient-to-br from-[#0D1D2E] to-[#07111F] p-6 rounded-3xl border border-sky-500/10 shadow-2xl flex flex-col sm:flex-row items-center justify-between gap-6">
-          <div className="flex items-center gap-4">
-            <div className="h-14 w-14 bg-sky-500/10 rounded-2xl flex items-center justify-center border border-sky-500/20 text-sky-400">
-              <Activity className="w-7 h-7" />
-            </div>
-            <div>
-              <span className="text-[10px] font-mono text-neutral-400 uppercase tracking-widest block">City Performance Grade</span>
-              <h3 className="text-2xl font-bold text-white font-display">City Health Score: <span className="text-[#10B981] font-black">{cityHealthScore}/100</span></h3>
-              <p className="text-xs text-neutral-400 font-light mt-0.5">Calculated autonomously based on active, pending, and fixed complaints.</p>
-            </div>
-          </div>
-          <div className="flex items-center gap-3">
-            <span className="text-xs font-mono text-neutral-400">STATUS:</span>
-            <span className="text-xs uppercase px-3 py-1 bg-emerald-950/55 text-[#10B981] border border-[#10B981]/25 rounded-full font-bold">
-              ● Healthy Grid
-            </span>
-          </div>
-        </div>
-      </div>
-
-      {/* FIRST ROW - 4 LARGE CARDS */}
-      <div className="mb-8">
-        <h3 className="text-xs font-mono uppercase tracking-widest text-[#0EA5E9] font-bold mb-5">Quick Actions</h3>
+      {/* 2. Main content split layout */}
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
         
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+        {/* Left Side: Performance, Quick Actions, recent listings (8cols) */}
+        <div className="lg:col-span-8 flex flex-col gap-8">
           
-          {/* Large Card 1: Report Issue */}
-          <motion.div 
-            whileHover={{ y: -4 }}
-            onClick={() => onNavigate("report_issue")}
-            className="bg-[#0D1D2E]/40 hover:bg-neutral-900/40 p-6 rounded-2xl border border-sky-500/10 hover:border-sky-500/20 flex flex-col justify-between items-start h-48 transition-all duration-300 group cursor-pointer"
-          >
-            <div className="w-11 h-11 bg-sky-500/10 group-hover:bg-sky-500/25 rounded-xl flex items-center justify-center border border-sky-500/20 text-sky-400 transition-colors">
-              <Camera className="w-5 h-5" />
-            </div>
-            <div>
-              <h4 className="text-base font-extrabold text-white mt-4 group-hover:text-sky-450 transition-colors">
-                📸 Report Issue
-              </h4>
-              <p className="text-[11px] text-neutral-400 mt-1 font-light leading-relaxed">
-                Snap photos or log voice files. AI structures and dispatches immediately.
-              </p>
-            </div>
-          </motion.div>
-
-          {/* Large Card 2: Live Map */}
-          <motion.div 
-            whileHover={{ y: -4 }}
-            onClick={() => onNavigate("live_map")}
-            className="bg-[#0D1D2E]/40 hover:bg-neutral-900/40 p-6 rounded-2xl border border-sky-500/10 hover:border-sky-500/20 flex flex-col justify-between items-start h-48 transition-all duration-300 group cursor-pointer"
-          >
-            <div className="w-11 h-11 bg-emerald-500/10 group-hover:bg-emerald-500/25 rounded-xl flex items-center justify-center border border-emerald-500/20 text-[#10B981] transition-colors">
-              <MapPin className="w-5 h-5" />
-            </div>
-            <div>
-              <h4 className="text-base font-extrabold text-white mt-4 group-hover:text-emerald-450 transition-colors">
-                🗺 Live Map
-              </h4>
-              <p className="text-[11px] text-neutral-400 mt-1 font-light leading-relaxed">
-                View interactive pins of critical, medium, and resolved outages.
-              </p>
-            </div>
-          </motion.div>
-
-          {/* Large Card 3: AI Assistant */}
-          <motion.div 
-            whileHover={{ y: -4 }}
-            onClick={() => onNavigate("ai_assistant")}
-            className="bg-[#0D1D2E]/40 hover:bg-neutral-900/40 p-6 rounded-2xl border border-sky-500/10 hover:border-sky-500/20 flex flex-col justify-between items-start h-48 transition-all duration-300 group cursor-pointer"
-          >
-            <div className="w-11 h-11 bg-purple-500/10 group-hover:bg-purple-500/25 rounded-xl flex items-center justify-center border border-purple-500/20 text-purple-400 transition-colors">
-              <Brain className="w-5 h-5 animate-pulse" />
-            </div>
-            <div>
-              <h4 className="text-base font-extrabold text-white mt-4 group-hover:text-purple-450 transition-colors">
-                🤖 AI Assistant
-              </h4>
-              <p className="text-[11px] text-neutral-400 mt-1 font-light leading-relaxed">
-                Chat with CityGPT in Hindi/English about local grids and outage diagnostics.
-              </p>
-            </div>
-          </motion.div>
-
-          {/* Large Card 4: My Complaints */}
-          <motion.div 
-            whileHover={{ y: -4 }}
-            onClick={() => onNavigate("my_reports")}
-            className="bg-[#0D1D2E]/40 hover:bg-neutral-900/40 p-6 rounded-2xl border border-sky-500/10 hover:border-sky-500/20 flex flex-col justify-between items-start h-48 transition-all duration-300 group cursor-pointer"
-          >
-            <div className="w-11 h-11 bg-amber-500/10 group-hover:bg-amber-500/25 rounded-xl flex items-center justify-center border border-amber-500/20 text-amber-400 transition-colors">
-              <History className="w-5 h-5" />
-            </div>
-            <div>
-              <h4 className="text-base font-extrabold text-white mt-4 group-hover:text-amber-450 transition-colors">
-                📜 My Complaints
-              </h4>
-              <p className="text-[11px] text-neutral-400 mt-1 font-light leading-relaxed">
-                Monitor live chronological workflow statuses and verify resolutions.
-              </p>
-            </div>
-          </motion.div>
-
-        </div>
-      </div>
-
-      {/* SECOND ROW - 4 SECONDARY CARDS */}
-      <div className="mb-12">
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-          
-          {/* Secondary 1: Notifications */}
-          <div 
-            onClick={() => onNavigate("notifications")}
-            className="bg-neutral-900/50 p-5 rounded-2xl border border-neutral-850 hover:border-[#0EA5E9]/20 transition-all cursor-pointer flex items-center justify-between group"
-          >
-            <div className="flex items-center gap-3 truncate">
-              <div className="w-10 h-10 bg-[#0EA5E9]/10 rounded-xl flex items-center justify-center border border-[#0EA5E9]/10">
-                <Bell className="w-4 h-4 text-sky-400" />
-              </div>
-              <div className="truncate">
-                <p className="text-xs font-bold text-white group-hover:text-sky-450 transition-colors">🔔 Notifications</p>
-                <p className="text-[10px] text-neutral-500 truncate">{unreadNotifs} unread broadcasts</p>
-              </div>
-            </div>
-            <ChevronRight className="w-4 h-4 text-neutral-600 group-hover:translate-x-1 transition-transform" />
-          </div>
-
-          {/* Secondary 2: Rewards */}
-          <div 
-            onClick={() => onNavigate("profile")}
-            className="bg-neutral-900/50 p-5 rounded-2xl border border-neutral-850 hover:border-[#0EA5E9]/20 transition-all cursor-pointer flex items-center justify-between group"
-          >
-            <div className="flex items-center gap-3 truncate">
-              <div className="w-10 h-10 bg-amber-500/10 rounded-xl flex items-center justify-center border border-amber-500/15">
-                <Trophy className="w-4 h-4 text-amber-400" />
-              </div>
-              <div className="truncate">
-                <p className="text-xs font-bold text-white group-hover:text-amber-450 transition-colors">🏆 Rewards</p>
-                <p className="text-[10px] text-neutral-500 truncate">{rewards?.totalGreenPoints || 0} active pts</p>
-              </div>
-            </div>
-            <ChevronRight className="w-4 h-4 text-neutral-600 group-hover:translate-x-1 transition-transform" />
-          </div>
-
-          {/* Secondary 3: Statistics */}
-          <div 
-            onClick={() => onNavigate("city_health")}
-            className="bg-neutral-900/50 p-5 rounded-2xl border border-neutral-850 hover:border-[#0EA5E9]/20 transition-all cursor-pointer flex items-center justify-between group"
-          >
-            <div className="flex items-center gap-3 truncate">
-              <div className="w-10 h-10 bg-[#10B981]/10 rounded-xl flex items-center justify-center border border-[#10B981]/10">
-                <Activity className="w-4 h-4 text-[#10B981]" />
-              </div>
-              <div className="truncate">
-                <p className="text-xs font-bold text-white group-hover:text-[#10B981] transition-colors">📊 Statistics</p>
-                <p className="text-[10px] text-neutral-500 truncate">Grid telemetry check</p>
-              </div>
-            </div>
-            <ChevronRight className="w-4 h-4 text-neutral-600 group-hover:translate-x-1 transition-transform" />
-          </div>
-
-          {/* Secondary 4: Profile */}
-          <div 
-            onClick={() => onNavigate("profile")}
-            className="bg-neutral-900/50 p-5 rounded-2xl border border-neutral-850 hover:border-[#0EA5E9]/20 transition-all cursor-pointer flex items-center justify-between group"
-          >
-            <div className="flex items-center gap-3 truncate">
-              <div className="w-10 h-10 bg-purple-500/10 rounded-xl flex items-center justify-center border border-purple-500/15">
-                <User className="w-4 h-4 text-purple-400" />
-              </div>
-              <div className="truncate">
-                <p className="text-xs font-bold text-white group-hover:text-purple-400 transition-colors">👤 Profile</p>
-                <p className="text-[10px] text-neutral-500 truncate">Credentials & badges</p>
-              </div>
-            </div>
-            <ChevronRight className="w-4 h-4 text-neutral-600 group-hover:translate-x-1 transition-transform" />
-          </div>
-
-        </div>
-      </div>
-
-      {/* BOTTOM SECTION: RECENT COMPLAINTS LEDGER */}
-      <div className="bg-neutral-900/20 p-6 rounded-3xl border border-neutral-850">
-        <div className="flex items-center justify-between mb-5 border-b border-neutral-850 pb-3">
-          <div>
-            <h3 className="text-sm font-mono uppercase tracking-widest text-neutral-400 font-bold">Recent Complaints</h3>
-            <p className="text-[11px] text-neutral-500">Live feed of reported municipal logs near your location.</p>
-          </div>
-          <button 
-            onClick={() => onNavigate("my_reports")}
-            className="text-[11px] text-[#0EA5E9] hover:underline font-mono flex items-center gap-1 cursor-pointer"
-          >
-            View History <ChevronRight className="w-3 h-3" />
-          </button>
-        </div>
-
-        {recentComplaints.length === 0 ? (
-          <p className="text-xs text-neutral-500 italic py-4 text-center">No reports active in current ward cluster.</p>
-        ) : (
-          <div className="flex flex-col gap-4">
-            {recentComplaints.map((c) => (
-              <div 
-                key={c.id} 
-                className="bg-[#07111F] p-4.5 rounded-xl border border-neutral-900 flex flex-col sm:flex-row sm:items-center justify-between gap-4"
-              >
-                <div className="flex items-start gap-3.5">
-                  <div className="w-12 h-12 rounded-lg overflow-hidden bg-neutral-900 flex-shrink-0 border border-neutral-800">
-                    <img src={c.imageUrl} alt={c.title} className="w-full h-full object-cover" />
-                  </div>
-                  <div>
-                    <div className="flex items-center gap-2 flex-wrap">
-                      <span className="text-[9px] font-mono uppercase bg-neutral-950 px-1.5 py-0.5 rounded border border-neutral-800 text-sky-400">
-                        {c.id}
-                      </span>
-                      <span className="text-[9px] font-mono text-neutral-500 uppercase">{c.category}</span>
-                    </div>
-                    <h4 className="text-xs font-bold text-neutral-200 mt-1">{c.title}</h4>
-                    <p className="text-[10px] text-neutral-400 truncate max-w-sm sm:max-w-md font-light mt-0.5">{c.description}</p>
-                  </div>
+          {/* Top Bento Panel: City Health & Contributions */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            
+            {/* City Health Score Widget */}
+            <div className="bg-white p-6 rounded-[2rem] border border-slate-250 shadow-md flex items-center justify-between gap-4 relative overflow-hidden group">
+              <div className="flex flex-col justify-between h-full gap-5">
+                <div>
+                  <span className="text-[9px] font-bold text-slate-400 uppercase tracking-widest block font-mono">Dynamic Performance</span>
+                  <h3 className="text-sm font-extrabold text-slate-800 mt-0.5">City Health Score</h3>
                 </div>
-
-                <div className="flex items-center gap-4.5 justify-between sm:justify-end border-t sm:border-t-0 border-neutral-900 pt-3 sm:pt-0">
-                  <div className="text-left sm:text-right">
-                    <span className="block text-[9px] uppercase tracking-wider text-neutral-550 font-mono">STAFF TIME LIMIT</span>
-                    <span className="text-xs font-semibold text-sky-450 font-mono">{c.eta}</span>
-                  </div>
-                  <span className={`text-[10px] px-3 py-1 font-mono uppercase rounded font-bold ${
-                    c.status === "resolved" 
-                      ? "bg-emerald-950/60 text-[#10B981] border border-[#10B981]/20" 
-                      : c.status === "working" 
-                      ? "bg-sky-950/60 text-[#0EA5E9] border border-[#0EA5E9]/20"
-                      : "bg-neutral-900 text-neutral-400"
-                  }`}>
-                    {c.status === "ai_detected" ? "AI Classified" : c.status}
+                <div className="flex items-baseline gap-1.5">
+                  <span className="text-5xl font-black text-slate-900 font-display">{cityHealthScore}</span>
+                  <span className="text-xs text-slate-400 font-mono">/100</span>
+                  <span className="ml-2 text-xs font-bold text-emerald-600 bg-emerald-50 border border-emerald-100 px-2 py-0.5 rounded-full uppercase">
+                    Excellent
                   </span>
                 </div>
+              </div>
+
+              {/* Sparkline curve representing city rating trend */}
+              <div className="flex flex-col items-end gap-1.5">
+                <div className="w-32 h-14 relative">
+                  <svg className="w-full h-full" viewBox="0 0 120 40">
+                    {/* Linear grid lines */}
+                    <line x1="0" y1="30" x2="120" y2="30" stroke="#E2E8F0" strokeWidth="1" strokeDasharray="3 3" />
+                    <line x1="0" y1="15" x2="120" y2="15" stroke="#E2E8F0" strokeWidth="1" strokeDasharray="3 3" />
+                    
+                    {/* Glowing trendline path */}
+                    <path 
+                      d="M 5,30 Q 25,25 45,15 T 85,22 T 115,5" 
+                      fill="none" 
+                      stroke="#10B981" 
+                      strokeWidth="2.5" 
+                      strokeLinecap="round"
+                    />
+                    {/* Dot on active point */}
+                    <circle cx="115" cy="5" r="3.5" fill="#10B981" />
+                    <circle cx="115" cy="5" r="7" stroke="#10B981" strokeWidth="1.5" fill="none" className="animate-ping" />
+                  </svg>
+                </div>
+                <span className="text-[9px] font-mono font-bold text-slate-400 uppercase">Mon &gt; Sun Trend</span>
+              </div>
+            </div>
+
+            {/* Your Contributions Stat Widget */}
+            <div className="bg-white p-6 rounded-[2rem] border border-slate-250 shadow-md flex items-center justify-between gap-6 relative overflow-hidden">
+              <div className="flex flex-col justify-between h-full gap-5">
+                <div>
+                  <span className="text-[9px] font-bold text-slate-400 uppercase tracking-widest block font-mono">Your Contributions</span>
+                  <h3 className="text-sm font-extrabold text-slate-800 mt-0.5">Community Impact</h3>
+                </div>
+                <div className="flex gap-4">
+                  <div>
+                    <span className="block text-2xl font-black text-slate-900 font-display">12</span>
+                    <span className="text-[10px] text-slate-400 font-mono uppercase font-bold tracking-wider">Reports</span>
+                  </div>
+                  <div className="border-r border-slate-200 h-9 my-auto" />
+                  <div>
+                    <span className="block text-2xl font-black text-amber-500 font-display">340</span>
+                    <span className="text-[10px] text-slate-400 font-mono uppercase font-bold tracking-wider">Points</span>
+                  </div>
+                </div>
+              </div>
+
+              <div className="w-14 h-14 bg-amber-50 rounded-2xl flex items-center justify-center border border-amber-100 text-amber-500 shadow-sm animate-pulse">
+                <Trophy className="w-7 h-7" />
+              </div>
+            </div>
+
+          </div>
+
+          {/* Quick Actions (Grid 2x4 Airbnb Style circular tags) */}
+          <div>
+            <h3 className="text-xs font-bold uppercase tracking-widest text-slate-400 font-mono mb-4">
+              Quick Actions Panel
+            </h3>
+            
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
+              
+              {/* Report Issue Action */}
+              <button 
+                onClick={() => onNavigate("report_issue")}
+                className="bg-white hover:bg-slate-50 p-5 rounded-2xl border border-slate-180 hover:border-sky-300 shadow-sm transition-all text-center flex flex-col items-center gap-3 cursor-pointer group"
+              >
+                <div className="w-12 h-12 rounded-full bg-blue-50 text-sky-600 flex items-center justify-center border border-blue-100 group-hover:scale-105 transition-transform shadow-inner">
+                  <Camera className="w-5 h-5" />
+                </div>
+                <div>
+                  <h4 className="text-xs font-extrabold text-slate-900">Report Issue</h4>
+                  <p className="text-[10px] text-slate-400 mt-0.5 leading-tight font-light">Dispatches instantly</p>
+                </div>
+              </button>
+
+              {/* Live Map Action */}
+              <button 
+                onClick={() => onNavigate("live_map")}
+                className="bg-white hover:bg-slate-50 p-5 rounded-2xl border border-slate-180 hover:border-emerald-300 shadow-sm transition-all text-center flex flex-col items-center gap-3 cursor-pointer group"
+              >
+                <div className="w-12 h-12 rounded-full bg-emerald-50 text-emerald-600 flex items-center justify-center border border-emerald-100 group-hover:scale-105 transition-transform shadow-inner">
+                  <MapPin className="w-5 h-5" />
+                </div>
+                <div>
+                  <h4 className="text-xs font-extrabold text-slate-900">Live Map</h4>
+                  <p className="text-[10px] text-slate-400 mt-0.5 leading-tight font-light">Outages & grids</p>
+                </div>
+              </button>
+
+              {/* AI Assistant Action */}
+              <button 
+                onClick={() => onNavigate("ai_assistant")}
+                className="bg-white hover:bg-slate-50 p-5 rounded-2xl border border-slate-180 hover:border-purple-300 shadow-sm transition-all text-center flex flex-col items-center gap-3 cursor-pointer group"
+              >
+                <div className="w-12 h-12 rounded-full bg-purple-50 text-purple-600 flex items-center justify-center border border-purple-100 group-hover:scale-105 transition-transform shadow-inner">
+                  <Brain className="w-5 h-5" />
+                </div>
+                <div>
+                  <h4 className="text-xs font-extrabold text-slate-900">AI Assistant</h4>
+                  <p className="text-[10px] text-slate-400 mt-0.5 leading-tight font-light">CityGPT 24/7 Node</p>
+                </div>
+              </button>
+
+              {/* My Complaints Action */}
+              <button 
+                onClick={() => onNavigate("my_reports")}
+                className="bg-white hover:bg-slate-50 p-5 rounded-2xl border border-slate-180 hover:border-amber-300 shadow-sm transition-all text-center flex flex-col items-center gap-3 cursor-pointer group"
+              >
+                <div className="w-12 h-12 rounded-full bg-amber-50 text-amber-600 flex items-center justify-center border border-amber-100 group-hover:scale-105 transition-transform shadow-inner">
+                  <History className="w-5 h-5" />
+                </div>
+                <div>
+                  <h4 className="text-xs font-extrabold text-slate-900">My Complaints</h4>
+                  <p className="text-[10px] text-slate-400 mt-0.5 leading-tight font-light">Status tracking</p>
+                </div>
+              </button>
+
+              {/* Notifications Action */}
+              <button 
+                onClick={() => onNavigate("notifications")}
+                className="bg-white hover:bg-slate-50 p-5 rounded-2xl border border-slate-180 hover:border-pink-300 shadow-sm transition-all text-center flex flex-col items-center gap-3 cursor-pointer group relative"
+              >
+                {unreadNotifs > 0 && (
+                  <span className="absolute top-4 right-8 bg-rose-500 text-white font-extrabold text-[9px] w-4.5 h-4.5 rounded-full flex items-center justify-center border border-white">
+                    {unreadNotifs}
+                  </span>
+                )}
+                <div className="w-12 h-12 rounded-full bg-pink-50 text-pink-600 flex items-center justify-center border border-pink-100 group-hover:scale-105 transition-transform shadow-inner">
+                  <Bell className="w-5 h-5" />
+                </div>
+                <div>
+                  <h4 className="text-xs font-extrabold text-slate-900">Notifications</h4>
+                  <p className="text-[10px] text-slate-400 mt-0.5 leading-tight font-light">Broadcast feeds</p>
+                </div>
+              </button>
+
+              {/* Rewards Action */}
+              <button 
+                onClick={() => onNavigate("profile")}
+                className="bg-white hover:bg-slate-50 p-5 rounded-2xl border border-slate-180 hover:border-yellow-300 shadow-sm transition-all text-center flex flex-col items-center gap-3 cursor-pointer group"
+              >
+                <div className="w-12 h-12 rounded-full bg-yellow-50 text-yellow-600 flex items-center justify-center border border-yellow-100 group-hover:scale-105 transition-transform shadow-inner">
+                  <Trophy className="w-5 h-5" />
+                </div>
+                <div>
+                  <h4 className="text-xs font-extrabold text-slate-900">Rewards</h4>
+                  <p className="text-[10px] text-slate-400 mt-0.5 leading-tight font-light">Badges & Subsidies</p>
+                </div>
+              </button>
+
+              {/* Statistics Action */}
+              <button 
+                onClick={() => onNavigate("city_health")}
+                className="bg-white hover:bg-slate-50 p-5 rounded-2xl border border-slate-180 hover:border-blue-300 shadow-sm transition-all text-center flex flex-col items-center gap-3 cursor-pointer group"
+              >
+                <div className="w-12 h-12 rounded-full bg-cyan-50 text-cyan-600 flex items-center justify-center border border-cyan-100 group-hover:scale-105 transition-transform shadow-inner">
+                  <Activity className="w-5 h-5" />
+                </div>
+                <div>
+                  <h4 className="text-xs font-extrabold text-slate-900">Statistics</h4>
+                  <p className="text-[10px] text-slate-400 mt-0.5 leading-tight font-light">Telemetry metrics</p>
+                </div>
+              </button>
+
+              {/* Profile Action */}
+              <button 
+                onClick={() => onNavigate("profile")}
+                className="bg-white hover:bg-slate-50 p-5 rounded-2xl border border-slate-180 hover:border-teal-300 shadow-sm transition-all text-center flex flex-col items-center gap-3 cursor-pointer group"
+              >
+                <div className="w-12 h-12 rounded-full bg-[#E0F2FE] text-sky-800 flex items-center justify-center border border-sky-100 group-hover:scale-105 transition-transform shadow-inner">
+                  <User className="w-5 h-5" />
+                </div>
+                <div>
+                  <h4 className="text-xs font-extrabold text-slate-900">My Profile</h4>
+                  <p className="text-[10px] text-slate-400 mt-0.5 leading-tight font-light">Citizen credential</p>
+                </div>
+              </button>
+
+            </div>
+          </div>
+
+          {/* Recent Complaints Feed Section */}
+          <div className="bg-white border border-slate-200/80 rounded-[2rem] p-6 shadow-sm">
+            
+            <div className="flex items-center justify-between border-b border-slate-100 pb-3.5 mb-5">
+              <div>
+                <h3 className="text-sm font-bold uppercase font-mono text-slate-500 tracking-wider">Recent Local Complaints</h3>
+                <p className="text-[11px] text-slate-400">Click a complaint row to sync life tracking detail timelines on the right.</p>
+              </div>
+              <button 
+                onClick={() => onNavigate("my_reports")}
+                className="text-xs font-bold text-sky-600 hover:underline flex items-center gap-0.5 cursor-pointer font-mono"
+              >
+                View Ledger &gt;
+              </button>
+            </div>
+
+            {complaints.length === 0 ? (
+              <p className="text-xs text-slate-400 italic py-6 text-center">No active municipal files inside current sector cluster.</p>
+            ) : (
+              <div className="flex flex-col gap-3.5">
+                {complaints.map((c) => {
+                  const isSelected = c.id === selectedComplaintId;
+                  return (
+                    <div 
+                      key={c.id} 
+                      onClick={() => setSelectedComplaintId(c.id)}
+                      className={`p-4 rounded-2xl border transition-all cursor-pointer flex flex-col md:flex-row items-start md:items-center justify-between gap-4 ${
+                        isSelected 
+                          ? "bg-sky-50/50 border-sky-300 shadow-sm shadow-sky-100" 
+                          : "bg-slate-50/40 border-slate-200 hover:bg-slate-50/80"
+                      }`}
+                    >
+                      <div className="flex items-start gap-4 truncate">
+                        <div className="w-12 h-12 rounded-xl overflow-hidden bg-slate-100 flex-shrink-0 border border-slate-200 shadow-sm relative">
+                          <img src={c.imageUrl} alt={c.title} className="w-full h-full object-cover" />
+                          {isSelected && (
+                            <div className="absolute inset-0 bg-sky-500/10 flex items-center justify-center">
+                              <Eye className="w-4 h-4 text-sky-600 bg-white/90 rounded-full p-0.5" />
+                            </div>
+                          )}
+                        </div>
+                        <div className="truncate">
+                          <div className="flex items-center gap-2 flex-wrap">
+                            <span className="text-[9px] font-bold font-mono uppercase bg-slate-100 border border-slate-200 text-slate-600 px-1.5 py-0.5 rounded">
+                              {c.id}
+                            </span>
+                            <span className="text-[9px] font-bold text-slate-400 uppercase font-mono">{c.category}</span>
+                            <span className="text-[10px] text-slate-400 font-light">• 25 min ago</span>
+                          </div>
+                          <h4 className="text-xs font-extrabold text-slate-800 mt-1">{c.title}</h4>
+                          <p className="text-[10px] text-slate-500 truncate max-w-[260px] md:max-w-md font-light mt-0.5">{c.description}</p>
+                        </div>
+                      </div>
+
+                      <div className="flex items-center gap-4.5 justify-between md:justify-end w-full md:w-auto border-t md:border-t-0 border-slate-100 pt-3 md:pt-0">
+                        <div className="text-left md:text-right">
+                          <span className="block text-[8px] uppercase tracking-wider text-slate-450 font-mono">STAFF ETA</span>
+                          <span className="text-xs font-bold text-sky-600 font-mono">{c.eta}</span>
+                        </div>
+                        <span className={`text-[9px] px-2.5 py-1 font-mono uppercase rounded-full font-bold border ${
+                          c.status === "resolved" 
+                            ? "bg-emerald-50 text-emerald-700 border-emerald-100" 
+                            : c.status === "working" || c.status === "assigned"
+                            ? "bg-sky-50 text-sky-700 border-sky-100 animate-pulse"
+                            : "bg-amber-50 text-amber-700 border-amber-100"
+                        }`}>
+                          {c.status === "ai_detected" ? "AI Classified" : c.status}
+                        </span>
+                      </div>
+
+                    </div>
+                  );
+                })}
+              </div>
+            )}
+          </div>
+
+          {/* Be a City Hero Promo Banner (Character flat design) */}
+          <div className="bg-gradient-to-r from-sky-550 from-[#E0F2FE] via-[#F0FDF4] to-[#EFF6FF] p-6 rounded-[2rem] border border-sky-100/60 shadow-lg flex flex-col md:flex-row items-center justify-between gap-6 relative overflow-hidden">
+            {/* Visual background sky rings */}
+            <div className="absolute right-[-10%] top-[-10%] w-48 h-48 bg-emerald-300/10 rounded-full blur-2xl" />
+            
+            <div className="space-y-1.5 max-w-md z-15">
+              <div className="inline-flex items-center gap-1 bg-amber-100 text-amber-800 px-2 py-0.5 rounded-full text-[9px] font-bold uppercase">
+                🏆 Top Contributor Prize
+              </div>
+              <h3 className="text-base font-extrabold text-slate-900 font-display">
+                Be a City Hero! 🌟
+              </h3>
+              <p className="text-xs text-slate-600 font-light leading-relaxed">
+                Report local concerns or verify closed-out repair works. Top active residents are awarded direct utility tax relief at the end of each billing cycle.
+              </p>
+            </div>
+
+            <button 
+              onClick={() => onNavigate("report_issue")}
+              className="px-6 py-3 bg-sky-600 hover:bg-sky-550 text-white rounded-full text-xs font-bold transition-all shadow-md shadow-sky-500/15 cursor-pointer flex-shrink-0"
+            >
+              Raise A Complaint →
+            </button>
+          </div>
+
+        </div>
+
+        {/* Right Side: Map preview, Issue Details + Timeline, AI chatbot widget (4cols) */}
+        <div className="lg:col-span-4 flex flex-col gap-6">
+          
+          {/* A. GIS Live City Map preview */}
+          <div className="bg-white border border-slate-200/80 rounded-[2rem] p-5 shadow-sm overflow-hidden">
+            <div className="flex items-center justify-between mb-3">
+              <h3 className="text-xs font-extrabold uppercase font-mono text-slate-500">
+                Live City Map Preview
+              </h3>
+              <span className="w-1.5 h-1.5 bg-emerald-500 rounded-full animate-ping" />
+            </div>
+
+            {/* Custom simulated map panel */}
+            <div className="relative w-full h-44 rounded-2xl bg-slate-50 border border-slate-150 overflow-hidden shadow-inner">
+              {/* GIS map vector path graphic */}
+              <svg className="absolute inset-0 w-full h-full" viewBox="0 0 200 120" fill="none">
+                {/* Roads paths */}
+                <path d="M 0 30 Q 80 40 200 20" stroke="#CBD5E1" strokeWidth="6" strokeLinecap="round" />
+                <path d="M 0 30 Q 80 40 200 20" stroke="#FFF" strokeWidth="3" strokeLinecap="round" />
+                
+                <path d="M 50 0 Q 30 60 70 120" stroke="#CBD5E1" strokeWidth="5" strokeLinecap="round" />
+                <path d="M 50 0 Q 30 60 70 120" stroke="#FFF" strokeWidth="2.5" strokeLinecap="round" />
+
+                <path d="M 140 0 L 160 120" stroke="#CBD5E1" strokeWidth="4" />
+                <path d="M 140 0 L 160 120" stroke="#FFF" strokeWidth="2" />
+
+                {/* River block */}
+                <path d="M 0 100 Q 100 80 200 95" stroke="#BAE6FD" strokeWidth="8" opacity="0.6" fill="none" />
+
+                {/* Simulated Pins */}
+                {/* Pin 1: Active Selected */}
+                <g className="animate-bounce">
+                  <circle cx="95" cy="55" r="5" fill="#EF4444" />
+                  <circle cx="95" cy="55" r="9" stroke="#EF4444" strokeWidth="1" fill="none" opacity="0.5" />
+                </g>
+                <circle cx="45" cy="40" r="4" fill="#3B82F6" />
+                <circle cx="150" cy="45" r="4" fill="#10B981" />
+                <circle cx="130" cy="20" r="4" fill="#F59E0B" />
+              </svg>
+
+              {/* Floating search layer */}
+              <div className="absolute top-2 left-2 right-2 flex items-center bg-white/90 backdrop-blur border border-slate-200 rounded-lg p-1 px-2.5 shadow-sm text-[10px] text-slate-500 gap-1.5">
+                <MapPin className="w-3.5 h-3.5 text-sky-500 flex-shrink-0" />
+                <span className="truncate">Near School Road, Delhi...</span>
+              </div>
+
+              {/* Grid map pointer icon */}
+              <div className="absolute bottom-2 right-2 bg-white rounded-lg p-1 shadow border border-slate-200">
+                <Brain className="w-4 h-4 text-sky-600" />
+              </div>
+            </div>
+
+            {/* Micro map category filter buttons */}
+            <div className="flex items-center gap-1 flex-wrap mt-3 border-t border-slate-100 pt-3">
+              {["All", "Garbage", "Water Leak", "Pothole", "Lights"].map((cat) => {
+                const isActive = mapFilter === cat;
+                return (
+                  <button 
+                    key={cat}
+                    onClick={() => setMapFilter(cat)}
+                    className={`text-[9px] px-2 py-0.5 rounded-full border transition-all font-bold ${
+                      isActive 
+                        ? "bg-sky-600 border-sky-600 text-white shadow-sm" 
+                        : "bg-slate-50 border-slate-150 text-slate-500 hover:bg-slate-100"
+                    }`}
+                  >
+                    {cat}
+                  </button>
+                );
+              })}
+            </div>
+          </div>
+
+          {/* B. Issue Details Track Timeline Panel (Pristine "Track Your Complaint" panel) */}
+          <div className="bg-white border border-slate-200/80 rounded-[2rem] p-5 shadow-sm">
+            <h3 className="text-xs font-extrabold uppercase font-mono text-slate-500 mb-3.5">
+              Track Your Complaint
+            </h3>
+
+            {activeComplaint ? (
+              <div className="space-y-4">
+                {/* Mini card summary */}
+                <div className="flex items-center gap-3 bg-slate-50 p-3 rounded-xl border border-slate-150">
+                  <div className="w-10 h-10 rounded-lg overflow-hidden flex-shrink-0 border border-slate-200">
+                    <img src={activeComplaint.imageUrl} className="w-full h-full object-cover" />
+                  </div>
+                  <div className="truncate">
+                    <span className="text-[8px] font-bold font-mono uppercase text-sky-600">{activeComplaint.id}</span>
+                    <h4 className="text-xs font-extrabold text-slate-800 truncate">{activeComplaint.title}</h4>
+                    <p className="text-[10px] text-slate-400 capitalize">{activeComplaint.category} • {activeComplaint.eta}</p>
+                  </div>
+                </div>
+
+                {/* Timeline flow tree */}
+                <div className="relative pl-5 space-y-4 border-l border-slate-100 ml-2.5 pt-1 text-[11px]">
+                  
+                  {/* Step 1 */}
+                  <div className="relative">
+                    <span className="absolute left-[-26px] top-0 w-3 h-3 bg-emerald-500 rounded-full border border-white" />
+                    <div className="flex items-center justify-between font-bold text-slate-800">
+                      <span>1. Complaint Submitted</span>
+                      <span className="text-[9px] text-slate-400 font-mono">Today, 10:30 AM</span>
+                    </div>
+                    <p className="text-[10px] text-slate-400 mt-0.5 leading-tight">Image metadata coordinates locked.</p>
+                  </div>
+
+                  {/* Step 2 */}
+                  <div className="relative">
+                    <span className="absolute left-[-26px] top-0 w-3 h-3 bg-emerald-500 rounded-full border border-white" />
+                    <div className="flex items-center justify-between font-bold text-slate-800">
+                      <span>2. AI Automated Classification</span>
+                      <span className="text-[9px] text-slate-400 font-mono">Today, 10:31 AM</span>
+                    </div>
+                    <p className="text-[10px] text-slate-400 mt-0.5 leading-tight">Computer vision diagnosed type & set high priority check.</p>
+                  </div>
+
+                  {/* Step 3 */}
+                  <div className="relative">
+                    <span className={`absolute left-[-26px] top-0 w-3 h-3 rounded-full border border-white ${
+                      activeComplaint.status !== "reported" && activeComplaint.status !== "ai_detected"
+                        ? "bg-emerald-500" 
+                        : "bg-slate-200"
+                    }`} />
+                    <div className="flex items-center justify-between font-bold text-slate-800">
+                      <span>3. Worker Dispatch Team 4</span>
+                      <span className="text-[9px] text-slate-400 font-mono">Today, 10:32 AM</span>
+                    </div>
+                    <p className="text-[10px] text-slate-400 mt-0.5 leading-tight">Assigned autonomously to nearest available vehicle.</p>
+                  </div>
+
+                  {/* Step 4 */}
+                  <div className="relative">
+                    <span className={`absolute left-[-26px] top-0 w-3 h-3 rounded-full border border-white ${
+                      activeComplaint.status === "working" || activeComplaint.status === "resolved"
+                        ? "bg-emerald-500" 
+                        : "bg-slate-200"
+                    }`} />
+                    <div className="flex items-center justify-between font-bold text-slate-800">
+                      <span>4. Maintenance In Progress</span>
+                      <span className="text-[9px] text-slate-400 font-mono">Today, 11:20 AM</span>
+                    </div>
+                    <p className="text-[10px] text-slate-400 mt-0.5 leading-tight">Acoustic scan and cleanup is underway.</p>
+                  </div>
+
+                  {/* Step 5 */}
+                  <div className="relative">
+                    <span className={`absolute left-[-26px] top-0 w-3 h-3 rounded-full border border-white ${
+                      activeComplaint.status === "resolved" 
+                        ? "bg-emerald-500 animate-ping-slow" 
+                        : "bg-slate-200"
+                    }`} />
+                    <div className="flex items-center justify-between font-bold text-slate-800">
+                      <span>5. Verified Resolution</span>
+                      <span className="text-[9px] text-slate-400 font-mono">Pending verification</span>
+                    </div>
+                    <p className="text-[10px] text-slate-400 mt-0.5 leading-tight">Upload photo of target cleaned spot to submit verification lock.</p>
+                  </div>
+
+                </div>
 
               </div>
-            ))}
+            ) : (
+              <p className="text-xs text-slate-400 italic text-center py-4">No report highlighted.</p>
+            )}
           </div>
-        )}
+
+          {/* C. CityGPT AI Assistant Embed Chat Container (Miniaturized) */}
+          <div className="bg-white border border-slate-200/80 rounded-[2rem] p-5 shadow-sm flex flex-col h-80 justify-between">
+            
+            <div className="flex items-center justify-between border-b border-slate-100 pb-2 mb-2">
+              <div className="flex items-center gap-2">
+                <Brain className="w-4.5 h-4.5 text-purple-600 animate-pulse" />
+                <span className="text-xs font-bold text-slate-800">CityGPT Assist embedding</span>
+              </div>
+              <span className="text-[8px] bg-sky-50 text-sky-700 px-2 py-0.5 rounded font-mono font-bold uppercase">Online</span>
+            </div>
+
+            {/* Messages Body */}
+            <div className="flex-grow overflow-y-auto space-y-2.5 pr-1 text-[11px] py-1">
+              {chatMessages.map((msg, i) => (
+                <div key={i} className={`flex ${msg.sender === "user" ? "justify-end" : "justify-start"}`}>
+                  <div className={`p-2.5 rounded-2xl max-w-[85%] leading-relaxed ${
+                    msg.sender === "user" 
+                      ? "bg-sky-600 text-white rounded-br-none" 
+                      : "bg-slate-50 text-slate-700 border border-slate-150 rounded-bl-none"
+                  }`}>
+                    {msg.text}
+                  </div>
+                </div>
+              ))}
+            </div>
+
+            {/* Quick Prompts options */}
+            <div className="flex items-center gap-1.5 overflow-x-auto py-1 border-t border-slate-100">
+              <button 
+                onClick={() => handleQuickAiQuery("Show garbage complaints near me")}
+                className="text-[9px] px-2 py-1 bg-slate-50 hover:bg-slate-100 border border-slate-200 text-slate-700 font-semibold rounded-full flex-shrink-0 cursor-pointer"
+              >
+                🗑 Garbage stats?
+              </button>
+              <button 
+                onClick={() => handleQuickAiQuery("How to redeem municipal reward points?")}
+                className="text-[9px] px-2 py-1 bg-slate-50 hover:bg-slate-100 border border-slate-200 text-slate-700 font-semibold rounded-full flex-shrink-0 cursor-pointer"
+              >
+                🏆 Points redemption?
+              </button>
+            </div>
+
+            {/* Submit chat form */}
+            <form onSubmit={handleChatSubmit} className="flex items-center gap-2 mt-2">
+              <input 
+                type="text" 
+                value={chatInput}
+                onChange={(e) => setChatInput(e.target.value)}
+                placeholder="Type query in English/Hindi..."
+                className="flex-grow py-2.5 px-3 bg-slate-50 border border-slate-200 rounded-xl text-xs text-slate-800 focus:outline-none focus:border-sky-500 focus:bg-white"
+              />
+              <button 
+                type="submit" 
+                className="p-2.5 bg-sky-600 hover:bg-sky-550 text-white rounded-xl shadow transition-colors cursor-pointer"
+              >
+                <Send className="w-3.5 h-3.5" />
+              </button>
+            </form>
+
+          </div>
+
+        </div>
+
       </div>
 
     </div>

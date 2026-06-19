@@ -9,8 +9,8 @@ interface LoginPageProps {
 }
 
 export default function LoginPage({ onLogin, onNavigateHome }: LoginPageProps) {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const [email, setEmail] = useState("arpita@citygpt.gov");
+  const [password, setPassword] = useState("citizen123");
   const [showPassword, setShowPassword] = useState(false);
   const [activeTab, setActiveTab] = useState<Role>("citizen");
 
@@ -34,28 +34,20 @@ export default function LoginPage({ onLogin, onNavigateHome }: LoginPageProps) {
   };
 
   const handleGoogleSuccess = () => {
-    // Quick google login triggers the current selected role login
     onLogin(activeTab, email || `${activeTab}@citygpt.gov`);
   };
 
   return (
-    <div className="relative min-h-screen bg-[#07111F] text-neutral-100 flex flex-col justify-center items-center px-4 overflow-hidden py-16">
-      {/* City Skyline Background Art Decoration */}
-      <div className="absolute inset-0 z-0 pointer-events-none overflow-hidden opacity-10">
-        <div className="absolute bottom-0 left-0 right-0 h-64 bg-repeat-x" style={{
-          backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1000 300'%3E%3Cpath fill='%230EA5E9' d='M0,300 L0,200 L40,200 L40,160 L80,160 L80,240 L120,240 L120,120 L160,120 L160,250 L200,250 L200,180 L240,180 L240,100 L280,100 L280,220 L320,220 L320,140 L360,140 L360,270 L400,270 L400,150 L440,150 L440,80 L480,80 L480,230 L520,230 L520,170 L560,170 L560,260 L600,260 L600,110 L640,110 L640,210 L680,210 L680,130 L720,130 L720,255 L760,255 L760,145 L800,145 L800,90 L840,90 L840,240 L880,240 L880,165 L920,165 L920,270 L960,270 L960,115 L1000,115 L1000,300 Z'/%3E%3C/svg%3E")`,
-          backgroundSize: "contain"
-        }} />
-      </div>
-
-      {/* Cyber ambient glow elements */}
-      <div className="absolute top-[20%] left-[20%] w-[400px] h-[400px] bg-sky-900/10 rounded-full blur-[100px] pointer-events-none" />
-      <div className="absolute bottom-[20%] right-[20%] w-[400px] h-[400px] bg-purple-900/15 rounded-full blur-[120px] pointer-events-none" />
+    <div className="relative min-h-screen bg-[#F8FAFC] text-slate-800 flex flex-col justify-center items-center px-4 overflow-hidden py-16 font-sans">
+      
+      {/* Light accent glowing backdrops */}
+      <div className="absolute top-[15%] left-[10%] w-[350px] h-[350px] bg-sky-100/50 rounded-full blur-[90px] pointer-events-none" />
+      <div className="absolute bottom-[15%] right-[10%] w-[350px] h-[350px] bg-emerald-100/40 rounded-full blur-[90px] pointer-events-none" />
 
       {/* Back button */}
       <button 
         onClick={onNavigateHome}
-        className="absolute top-8 left-8 flex items-center gap-2 text-xs font-semibold text-neutral-400 hover:text-white transition-colors group cursor-pointer z-10"
+        className="absolute top-8 left-8 flex items-center gap-2 text-xs font-bold text-slate-600 hover:text-slate-900 transition-all group cursor-pointer z-10 bg-white px-4 py-2 rounded-full shadow-sm border border-slate-200"
       >
         <ArrowLeft className="w-4 h-4 group-hover:-translate-x-1 transition-transform" />
         Back to Landing
@@ -66,69 +58,69 @@ export default function LoginPage({ onLogin, onNavigateHome }: LoginPageProps) {
         {/* Brand Header */}
         <div className="text-center mb-8">
           <motion.div 
-            initial={{ opacity: 0, scale: 0.8 }}
+            initial={{ opacity: 0, scale: 0.9 }}
             animate={{ opacity: 1, scale: 1 }}
-            className="inline-flex items-center gap-2 px-3 py-1 bg-sky-950/40 text-sky-400 border border-sky-500/20 rounded-full text-[11px] font-mono tracking-wider uppercase mb-3"
+            className="inline-flex items-center gap-1.5 px-3 py-1 bg-sky-50 text-sky-700 border border-sky-100 rounded-full text-xs font-bold tracking-wide uppercase mb-3"
           >
-            🌆 CityGPT Municipal Login
+            🌆 CityGPT Municipal Hub
           </motion.div>
-          <h1 className="text-3xl font-bold tracking-tight text-neutral-50 font-display uppercase">
+          <h1 className="text-3xl font-extrabold tracking-tight text-slate-900 font-display">
             Welcome Back
           </h1>
-          <p className="text-xs text-neutral-400 font-light mt-1.5">
+          <p className="text-xs text-slate-500 font-light mt-1.5">
             Log in to manage, report, and maintain our smart urban grid.
           </p>
         </div>
 
-        {/* Custom Glassmorphism Box */}
+        {/* Custom White Elegant Box */}
         <motion.div 
-          initial={{ opacity: 0, y: 20 }}
+          initial={{ opacity: 0, y: 15 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5 }}
-          className="bg-[#0D1D2E]/60 backdrop-blur-xl border border-sky-500/10 rounded-3xl p-8 shadow-2xl relative overflow-hidden"
+          transition={{ duration: 0.4 }}
+          className="bg-white border border-slate-200/80 rounded-[2rem] p-8 shadow-xl relative overflow-hidden"
         >
           {/* Subtle upper gradient bar */}
-          <div className="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-sky-500 via-purple-500 to-emerald-500" />
+          <div className="absolute top-0 left-0 right-0 h-[3px] bg-gradient-to-r from-sky-500 via-emerald-400 to-indigo-500" />
           
           <form onSubmit={handleSubmit} className="space-y-5">
             
             {/* Email Field */}
             <div>
-              <label className="block text-[11px] font-mono uppercase tracking-wider text-neutral-400 mb-2">
+              <label className="block text-[11px] font-bold text-slate-500 uppercase tracking-wider mb-2">
                 Email Address
               </label>
               <div className="relative">
-                <Mail className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-neutral-500" />
+                <Mail className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
                 <input 
                   type="email"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   placeholder="name@citygpt.gov"
                   required
-                  className="w-full py-3 pl-11 pr-4 bg-neutral-950/80 border border-neutral-800 hover:border-sky-500/30 focus:border-sky-500/80 text-sm text-white rounded-xl focus:outline-none transition-all"
+                  className="w-full py-3.5 pl-11 pr-4 bg-slate-50 border border-slate-200 hover:border-slate-350 focus:border-sky-500 text-sm text-slate-800 rounded-2xl focus:outline-none transition-all"
                 />
               </div>
             </div>
 
             {/* Password Field */}
             <div>
-              <label className="block text-[11px] font-mono uppercase tracking-wider text-neutral-400 mb-2">
+              <label className="block text-[11px] font-bold text-slate-500 uppercase tracking-wider mb-2">
                 Security Password
               </label>
               <div className="relative">
-                <Lock className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-neutral-500" />
+                <Lock className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
                 <input 
                   type={showPassword ? "text" : "password"}
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   placeholder="••••••••••••"
                   required
-                  className="w-full py-3 pl-11 pr-11 bg-neutral-950/80 border border-neutral-800 hover:border-sky-500/30 focus:border-sky-500/80 text-sm text-white rounded-xl focus:outline-none transition-all"
+                  className="w-full py-3.5 pl-11 pr-11 bg-slate-50 border border-slate-200 hover:border-slate-350 focus:border-sky-500 text-sm text-slate-800 rounded-2xl focus:outline-none transition-all"
                 />
                 <button
                   type="button"
                   onClick={() => setShowPassword(!showPassword)}
-                  className="absolute right-3.5 top-1/2 -translate-y-1/2 text-neutral-500 hover:text-neutral-300 transition-colors"
+                  className="absolute right-3.5 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 transition-colors"
                 >
                   {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
                 </button>
@@ -138,24 +130,24 @@ export default function LoginPage({ onLogin, onNavigateHome }: LoginPageProps) {
             {/* Submit Button */}
             <button
               type="submit"
-              className="w-full py-3.5 px-6 rounded-xl bg-gradient-to-r from-sky-600 to-indigo-600 hover:from-sky-500 hover:to-indigo-500 text-white font-semibold text-sm transition-all transform active:scale-98 shadow-lg shadow-sky-600/10 cursor-pointer"
+              className="w-full py-3.5 px-6 rounded-2xl bg-sky-600 hover:bg-sky-550 text-white font-bold text-sm transition-all transform active:scale-98 shadow-md shadow-sky-500/15 cursor-pointer"
             >
               Sign In to Dashboard
             </button>
 
             {/* Continue with Google */}
             <div className="relative flex py-2 items-center">
-              <div className="flex-grow border-t border-neutral-800"></div>
-              <span className="flex-shrink mx-4 text-[10px] uppercase font-mono text-neutral-500 tracking-wider">or sign in with</span>
-              <div className="flex-grow border-t border-neutral-800"></div>
+              <div className="flex-grow border-t border-slate-200"></div>
+              <span className="flex-shrink mx-4 text-[10px] uppercase font-bold text-slate-400 tracking-wider">or sign in with</span>
+              <div className="flex-grow border-t border-slate-200"></div>
             </div>
 
             <button
               type="button"
               onClick={handleGoogleSuccess}
-              className="w-full py-3 px-4 rounded-xl bg-neutral-950 border border-neutral-800 hover:bg-neutral-900 text-neutral-200 text-xs font-semibold flex items-center justify-center gap-2.5 transition-colors cursor-pointer"
+              className="w-full py-3.5 px-4 rounded-2xl bg-white border border-slate-250 hover:bg-slate-50 text-slate-700 text-xs font-bold flex items-center justify-center gap-2.5 transition-colors cursor-pointer"
             >
-              <svg className="w-4 h-4 text-white" viewBox="0 0 24 24" fill="currentColor">
+              <svg className="w-4.5 h-4.5" viewBox="0 0 24 24" fill="currentColor">
                 <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/>
                 <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/>
                 <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z" fill="#FBBC05"/>
@@ -166,37 +158,37 @@ export default function LoginPage({ onLogin, onNavigateHome }: LoginPageProps) {
 
           </form>
 
-          {/* Quick Role Fill Controls - below the form in same card or slightly outside */}
-          <div className="mt-8 pt-6 border-t border-neutral-800">
-            <h4 className="text-[10px] font-mono uppercase tracking-wider text-neutral-400 mb-3 text-center">
-              Quick System Roles (Autofill & Select)
+          {/* Quick Role Fill Controls */}
+          <div className="mt-8 pt-6 border-t border-slate-150">
+            <h4 className="text-[10px] font-bold uppercase tracking-wider text-slate-400 mb-3 text-center">
+              Quick System Roles (Autofill credentials)
             </h4>
             <div className="grid grid-cols-3 gap-2">
               <button
                 type="button"
                 onClick={() => handleRoleQuickSelect("citizen")}
-                className={`py-2 px-1 rounded-lg border text-[11px] font-semibold flex flex-col items-center gap-1 transition-all cursor-pointer ${activeTab === "citizen" ? "bg-sky-505/10 border-sky-500 text-sky-400" : "bg-neutral-950 border-neutral-800 text-neutral-400 hover:text-white"}`}
+                className={`py-2 rounded-xl border text-[11px] font-bold flex flex-col items-center gap-1 transition-all cursor-pointer ${activeTab === "citizen" ? "bg-sky-50 border-sky-400 text-sky-600 shadow-sm" : "bg-slate-50 border-slate-200 text-slate-550 hover:bg-slate-100"}`}
               >
-                <Users className="w-3.5 h-3.5" />
-                Citizen Login
+                <Users className="w-3.5 h-3.5 text-sky-500" />
+                Citizen (Arpita)
               </button>
               
               <button
                 type="button"
                 onClick={() => handleRoleQuickSelect("worker")}
-                className={`py-2 px-1 rounded-lg border text-[11px] font-semibold flex flex-col items-center gap-1 transition-all cursor-pointer ${activeTab === "worker" ? "bg-amber-505/10 border-amber-500 text-amber-400" : "bg-neutral-950 border-neutral-800 text-neutral-400 hover:text-white"}`}
+                className={`py-2 rounded-xl border text-[11px] font-bold flex flex-col items-center gap-1 transition-all cursor-pointer ${activeTab === "worker" ? "bg-emerald-50 border-emerald-400 text-emerald-600 shadow-sm" : "bg-slate-50 border-slate-200 text-slate-550 hover:bg-slate-100"}`}
               >
-                <Hammer className="w-3.5 h-3.5" />
-                Worker Login
+                <Hammer className="w-3.5 h-3.5 text-emerald-500" />
+                Field Worker
               </button>
               
               <button
                 type="button"
                 onClick={() => handleRoleQuickSelect("admin")}
-                className={`py-2 px-1 rounded-lg border text-[11px] font-semibold flex flex-col items-center gap-1 transition-all cursor-pointer ${activeTab === "admin" ? "bg-purple-505/10 border-purple-500 text-purple-400" : "bg-neutral-950 border-neutral-800 text-neutral-400 hover:text-white"}`}
+                className={`py-2 rounded-xl border text-[11px] font-bold flex flex-col items-center gap-1 transition-all cursor-pointer ${activeTab === "admin" ? "bg-purple-50 border-purple-400 text-purple-600 shadow-sm" : "bg-slate-50 border-slate-200 text-slate-550 hover:bg-slate-100"}`}
               >
-                <Shield className="w-3.5 h-3.5" />
-                Admin Login
+                <Shield className="w-3.5 h-3.5 text-purple-500" />
+                Admin Panel
               </button>
             </div>
           </div>
@@ -204,8 +196,8 @@ export default function LoginPage({ onLogin, onNavigateHome }: LoginPageProps) {
         </motion.div>
 
         {/* Footer info lock */}
-        <p className="text-center text-[10px] text-neutral-500 font-mono mt-6">
-          🔐 SECURED BY NEURAL MUNICIPAL GRID PLATFORM
+        <p className="text-center text-[10px] text-slate-400 font-mono mt-6">
+          🔒 PUBLIC CRYPTO-BOUND MUNICIPAL GRID CLIENT
         </p>
 
       </div>

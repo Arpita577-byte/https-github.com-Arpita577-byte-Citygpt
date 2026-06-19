@@ -412,10 +412,10 @@ export default function App() {
   };
 
   return (
-    <div className="min-h-screen bg-neutral-950 text-neutral-100 flex flex-col">
+    <div className="min-h-screen bg-[#F8FAFC] text-slate-800 flex flex-col font-sans">
       
       {/* PERSISTENT LUXURY NAVBAR */}
-      <nav className="fixed top-0 left-0 right-0 z-40 bg-neutral-950/80 backdrop-blur-md border-b border-neutral-900/80 px-6 py-4.5">
+      <nav className="fixed top-0 left-0 right-0 z-40 bg-white/95 backdrop-blur-md border-b border-slate-200/80 px-6 py-4">
         <div className="max-w-7xl mx-auto flex items-center justify-between">
           
           {/* Logo */}
@@ -423,46 +423,46 @@ export default function App() {
             onClick={() => { setActivePage("landing"); setMobileMenuOpen(false); }}
             className="flex items-center gap-2 cursor-pointer group"
           >
-            <span className="text-lg font-bold font-display tracking-tight text-neutral-50 flex items-center gap-1.5 uppercase">
+            <span className="text-lg font-extrabold font-display tracking-tight text-slate-900 flex items-center gap-1.5 uppercase">
               🌆 CityGPT
             </span>
           </div>
 
           {/* Desktop Nav Selection Links */}
           <div className="hidden lg:flex items-center gap-6">
-            <button onClick={() => setActivePage("landing")} className={`text-xs font-semibold cursor-pointer transition-colors ${activePage === "landing" ? "text-sky-400" : "text-neutral-400 hover:text-white"}`}>Home</button>
-            <button onClick={() => { setActiveRole("citizen"); setActivePage("dashboard"); }} className={`text-xs font-semibold cursor-pointer transition-colors ${activePage === "dashboard" ? "text-sky-400" : "text-neutral-400 hover:text-white"}`}>Citizen Hub</button>
-            <button onClick={() => { setActiveRole("citizen"); setActivePage("report_issue"); }} className={`text-xs font-semibold cursor-pointer transition-colors ${activePage === "report_issue" ? "text-sky-400" : "text-neutral-400 hover:text-white"}`}>Report Issue</button>
-            <button onClick={() => { setActiveRole("citizen"); setActivePage("live_map"); }} className={`text-xs font-semibold cursor-pointer transition-colors ${activePage === "live_map" ? "text-sky-400" : "text-neutral-400 hover:text-white"}`}>Live Map</button>
-            <button onClick={() => { setActiveRole("citizen"); setActivePage("city_health"); }} className={`text-xs font-semibold cursor-pointer transition-colors ${activePage === "city_health" ? "text-sky-400" : "text-neutral-400 hover:text-white"}`}>Outages & Statistics</button>
-            <button onClick={() => { setActiveRole("citizen"); setActivePage("ai_assistant"); }} className={`text-xs font-semibold cursor-pointer transition-colors ${activePage === "ai_assistant" ? "text-sky-400" : "text-neutral-400 hover:text-white"}`}>AI Assistant</button>
-            <button onClick={() => { setActiveRole("citizen"); setActivePage("my_reports"); }} className={`text-xs font-semibold cursor-pointer transition-colors ${activePage === "my_reports" ? "text-sky-400" : "text-neutral-400 hover:text-white"}`}>My Complaints</button>
-            <button onClick={() => { setActiveRole("citizen"); setActivePage("profile"); }} className={`text-xs font-semibold cursor-pointer transition-colors ${activePage === "profile" ? "text-sky-400" : "text-neutral-400 hover:text-white"}`}>Profile</button>
+            <button onClick={() => setActivePage("landing")} className={`text-xs font-bold cursor-pointer transition-colors ${activePage === "landing" ? "text-sky-600" : "text-slate-500 hover:text-slate-900"}`}>Home</button>
+            <button onClick={() => { setActiveRole("citizen"); setActivePage("dashboard"); }} className={`text-xs font-bold cursor-pointer transition-colors ${activePage === "dashboard" ? "text-sky-600" : "text-slate-500 hover:text-slate-900"}`}>Citizen Hub</button>
+            <button onClick={() => { setActiveRole("citizen"); setActivePage("report_issue"); }} className={`text-xs font-bold cursor-pointer transition-colors ${activePage === "report_issue" ? "text-sky-600" : "text-slate-500 hover:text-slate-900"}`}>Report Issue</button>
+            <button onClick={() => { setActiveRole("citizen"); setActivePage("live_map"); }} className={`text-xs font-bold cursor-pointer transition-colors ${activePage === "live_map" ? "text-sky-600" : "text-slate-500 hover:text-slate-900"}`}>Live Map</button>
+            <button onClick={() => { setActiveRole("citizen"); setActivePage("city_health"); }} className={`text-xs font-bold cursor-pointer transition-colors ${activePage === "city_health" ? "text-sky-600" : "text-slate-500 hover:text-slate-900"}`}>Outages & Statistics</button>
+            <button onClick={() => { setActiveRole("citizen"); setActivePage("ai_assistant"); }} className={`text-xs font-bold cursor-pointer transition-colors ${activePage === "ai_assistant" ? "text-sky-600" : "text-slate-500 hover:text-slate-900"}`}>AI Assistant</button>
+            <button onClick={() => { setActiveRole("citizen"); setActivePage("my_reports"); }} className={`text-xs font-bold cursor-pointer transition-colors ${activePage === "my_reports" ? "text-sky-600" : "text-slate-500 hover:text-slate-900"}`}>My Complaints</button>
+            <button onClick={() => { setActiveRole("citizen"); setActivePage("profile"); }} className={`text-xs font-bold cursor-pointer transition-colors ${activePage === "profile" ? "text-sky-600" : "text-slate-500 hover:text-slate-900"}`}>Profile</button>
           </div>
 
           {/* DYNAMIC ROLE SELECTOR (SPECTACULAR SEAMLESS TESTING PROTOCOL!) */}
           <div className="hidden sm:flex items-center gap-3">
             
             {/* Nav role select dropdown selector */}
-            <div className="flex items-center bg-neutral-900 border border-neutral-850 rounded-xl p-1 text-[11px] font-semibold gap-1">
+            <div className="flex items-center bg-slate-100 border border-slate-200 rounded-xl p-1 text-[11px] font-bold gap-1">
               <button 
                 id="role-btn-citizen"
                 onClick={() => { setActiveRole("citizen"); if (activePage === "landing") setActivePage("dashboard"); }}
-                className={`px-3 py-1.5 rounded-lg border transition-all cursor-pointer ${activeRole === "citizen" ? "bg-indigo-600 border-indigo-500/30 text-white font-bold" : "border-transparent text-neutral-400 hover:text-white"}`}
+                className={`px-3 py-1.5 rounded-lg border transition-all cursor-pointer ${activeRole === "citizen" ? "bg-white border-slate-200 text-sky-700 font-bold shadow-sm" : "border-transparent text-slate-550 hover:text-slate-900"}`}
               >
                 Citizen
               </button>
               <button 
                 id="role-btn-worker"
                 onClick={() => { setActiveRole("worker"); }}
-                className={`px-3 py-1.5 rounded-lg border transition-all cursor-pointer ${activeRole === "worker" ? "bg-amber-600 border-amber-500/30 text-white font-bold flex items-center gap-1" : "border-transparent text-neutral-400 hover:text-white"}`}
+                className={`px-3 py-1.5 rounded-lg border transition-all cursor-pointer ${activeRole === "worker" ? "bg-white border-slate-200 text-emerald-700 font-bold flex items-center gap-1 shadow-sm" : "border-transparent text-slate-550 hover:text-slate-900"}`}
               >
-                <Hammer className="w-3.5 h-3.5" /> Worker
+                <Hammer className="w-3.5 h-3.5 text-emerald-500" /> Worker
               </button>
               <button 
                 id="role-btn-admin"
                 onClick={() => { setActiveRole("admin"); }}
-                className={`px-3 py-1.5 rounded-lg border transition-all cursor-pointer ${activeRole === "admin" ? "bg-purple-600 border-purple-500/30 text-white font-bold" : "border-transparent text-neutral-400 hover:text-white"}`}
+                className={`px-3 py-1.5 rounded-lg border transition-all cursor-pointer ${activeRole === "admin" ? "bg-white border-slate-200 text-purple-700 font-bold shadow-sm" : "border-transparent text-slate-550 hover:text-slate-900"}`}
               >
                 Official
               </button>
@@ -473,7 +473,7 @@ export default function App() {
               <button 
                 id="nav-bell-btn"
                 onClick={() => { setBellOpen(!bellOpen); if (!bellOpen) markAllNotificationsRead(); }}
-                className="p-3 bg-neutral-900 border border-neutral-850 hover:bg-neutral-800 text-neutral-400 hover:text-white rounded-xl transition-all cursor-pointer relative"
+                className="p-3 bg-white border border-slate-200 hover:bg-slate-50 text-slate-500 hover:text-slate-800 rounded-xl transition-all cursor-pointer relative shadow-sm"
               >
                 <Bell className="w-4 h-4" />
                 {notifications.filter(n => !n.read).length > 0 && (
@@ -483,23 +483,23 @@ export default function App() {
 
               {/* Notification drop collapse */}
               {bellOpen && (
-                <div className="absolute right-0 mt-2 w-80 bg-neutral-900 border border-neutral-800 rounded-2xl p-4 shadow-2xl z-50 flex flex-col gap-3">
-                  <div className="flex items-center justify-between border-b border-neutral-800 pb-2 mb-1">
-                    <span className="text-[10px] font-mono text-neutral-400 font-bold uppercase">Incident Broadcast Stream</span>
-                    <button onClick={() => setBellOpen(false)} className="text-[9px] text-neutral-500 hover:text-neutral-200">Close</button>
+                <div className="absolute right-0 mt-2 w-80 bg-white border border-slate-200 rounded-2xl p-4 shadow-xl z-50 flex flex-col gap-3">
+                  <div className="flex items-center justify-between border-b border-slate-100 pb-2 mb-1">
+                    <span className="text-[10px] font-bold font-mono text-slate-500 uppercase">Incident Broadcast Stream</span>
+                    <button onClick={() => setBellOpen(false)} className="text-[9px] text-slate-400 hover:text-slate-700 font-bold">Close</button>
                   </div>
                   {notifications.length === 0 ? (
-                    <p className="text-[10px] text-neutral-500">No telemetry warnings.</p>
+                    <p className="text-[10px] text-slate-400">No telemetry warnings.</p>
                   ) : (
                     <div className="flex flex-col gap-3 max-h-60 overflow-y-auto pr-1">
                       {notifications.map((n) => (
-                        <div key={n.id} className="p-2 bg-neutral-950 rounded-lg text-[11px] leading-snug border border-neutral-900 flex flex-col gap-1">
+                        <div key={n.id} className="p-2.5 bg-slate-50 rounded-xl text-[11px] leading-snug border border-slate-150 flex flex-col gap-1">
                           <div className="flex items-center gap-1.5">
-                            <span className={`w-1.5 h-1.5 rounded-full ${n.type === "success" ? "bg-emerald-400" : n.type === "emergency" ? "bg-rose-500 animate-pulse" : "bg-indigo-400"}`} />
-                            <strong className="text-neutral-200">{n.title}</strong>
+                            <span className={`w-1.5 h-1.5 rounded-full ${n.type === "success" ? "bg-emerald-500" : n.type === "emergency" ? "bg-rose-500 animate-pulse" : "bg-indigo-500"}`} />
+                            <strong className="text-slate-800">{n.title}</strong>
                           </div>
-                          <p className="text-neutral-400 font-light">{n.message}</p>
-                          <span className="text-[9px] text-neutral-500 font-mono mt-0.5">{n.time}</span>
+                          <p className="text-slate-600 font-light">{n.message}</p>
+                          <span className="text-[9px] text-slate-400 font-mono mt-0.5">{n.time}</span>
                         </div>
                       ))}
                     </div>
@@ -509,7 +509,7 @@ export default function App() {
             </div>
 
             {/* Profile Avatar identifier */}
-            <div className="w-10 h-10 bg-indigo-950 text-indigo-400 font-black flex items-center justify-center rounded-xl border border-indigo-500/25 cursor-pointer hover:border-indigo-400 transition-colors" onClick={() => setActivePage("profile")}>
+            <div className="w-10 h-10 bg-sky-50 text-sky-700 font-black flex items-center justify-center rounded-xl border border-sky-100 cursor-pointer hover:bg-sky-100 transition-all shadow-sm" onClick={() => setActivePage("profile")}>
               AM
             </div>
 
@@ -518,7 +518,7 @@ export default function App() {
           {/* Mobile Menu Action trigger */}
           <button 
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-            className="lg:hidden p-2 text-neutral-400 hover:text-white cursor-pointer"
+            className="lg:hidden p-2 text-slate-400 hover:text-slate-800 cursor-pointer"
           >
             {mobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
           </button>
@@ -528,26 +528,26 @@ export default function App() {
 
       {/* MOBILE COLLAPSIBILITY NAVIGATION MENU OVERLAY */}
       {mobileMenuOpen && (
-        <div className="fixed inset-0 top-[60px] z-30 bg-neutral-950/95 backdrop-blur-md flex flex-col p-6 gap-6 lg:hidden border-b border-neutral-900 text-neutral-400 font-light overflow-y-auto">
+        <div className="fixed inset-0 top-[60px] z-30 bg-white/95 backdrop-blur-md flex flex-col p-6 gap-6 lg:hidden border-b border-slate-200 text-slate-600 font-light overflow-y-auto shadow-lg animate-fade-in">
           
           {/* Main Links */}
-          <div className="flex flex-col gap-4 text-sm font-semibold uppercase tracking-wider">
-            <button onClick={() => { setActivePage("landing"); setMobileMenuOpen(false); }} className="text-left w-full hover:text-white">Home Landing</button>
-            <button onClick={() => { setActiveRole("citizen"); setActivePage("dashboard"); setMobileMenuOpen(false); }} className="text-left w-full hover:text-white">Citizen Dashboard</button>
-            <button onClick={() => { setActiveRole("citizen"); setActivePage("report_issue"); setMobileMenuOpen(false); }} className="text-left w-full hover:text-white">Report Issue</button>
-            <button onClick={() => { setActiveRole("citizen"); setActivePage("live_map"); setMobileMenuOpen(false); }} className="text-left w-full hover:text-white">See Live Map</button>
-            <button onClick={() => { setActiveRole("citizen"); setActivePage("ai_assistant"); setMobileMenuOpen(false); }} className="text-left w-full hover:text-white">CityGPT AI Assistant</button>
-            <button onClick={() => { setActiveRole("citizen"); setActivePage("my_reports"); setMobileMenuOpen(false); }} className="text-left w-full hover:text-white">My Complaints</button>
-            <button onClick={() => { setActiveRole("citizen"); setActivePage("profile"); setMobileMenuOpen(false); }} className="text-left w-full hover:text-white">Profile Credentials</button>
+          <div className="flex flex-col gap-4 text-sm font-bold uppercase tracking-wider">
+            <button onClick={() => { setActivePage("landing"); setMobileMenuOpen(false); }} className="text-left w-full hover:text-slate-950">Home Landing</button>
+            <button onClick={() => { setActiveRole("citizen"); setActivePage("dashboard"); setMobileMenuOpen(false); }} className="text-left w-full hover:text-slate-955">Citizen Dashboard</button>
+            <button onClick={() => { setActiveRole("citizen"); setActivePage("report_issue"); setMobileMenuOpen(false); }} className="text-left w-full hover:text-slate-955">Report Issue</button>
+            <button onClick={() => { setActiveRole("citizen"); setActivePage("live_map"); setMobileMenuOpen(false); }} className="text-left w-full hover:text-slate-955">See Live Map</button>
+            <button onClick={() => { setActiveRole("citizen"); setActivePage("ai_assistant"); setMobileMenuOpen(false); }} className="text-left w-full hover:text-slate-955">CityGPT AI Assistant</button>
+            <button onClick={() => { setActiveRole("citizen"); setActivePage("my_reports"); setMobileMenuOpen(false); }} className="text-left w-full hover:text-slate-955">My Complaints</button>
+            <button onClick={() => { setActiveRole("citizen"); setActivePage("profile"); setMobileMenuOpen(false); }} className="text-left w-full hover:text-slate-955">Profile Credentials</button>
           </div>
 
           {/* Quick Role Selectors */}
-          <div className="pt-6 border-t border-neutral-900">
-            <p className="text-[10px] font-mono text-neutral-500 uppercase tracking-widest mb-3">Testing Role simulation</p>
+          <div className="pt-6 border-t border-slate-200">
+            <p className="text-[10px] font-mono text-slate-400 uppercase tracking-widest mb-3 font-bold">Testing Role simulation</p>
             <div className="grid grid-cols-3 gap-2">
-              <button onClick={() => { setActiveRole("citizen"); setActivePage("dashboard"); setMobileMenuOpen(false); }} className={`py-2 rounded-xl text-xs font-semibold ${activeRole === "citizen" ? "bg-indigo-600 text-white" : "bg-neutral-900"}`}>Citizen</button>
-              <button onClick={() => { setActiveRole("worker"); setMobileMenuOpen(false); }} className={`py-2 rounded-xl text-xs font-semibold ${activeRole === "worker" ? "bg-amber-600 text-white" : "bg-neutral-900"}`}>Worker</button>
-              <button onClick={() => { setActiveRole("admin"); setMobileMenuOpen(false); }} className={`py-2 rounded-xl text-xs font-semibold ${activeRole === "admin" ? "bg-purple-600 text-white" : "bg-neutral-900"}`}>admin</button>
+              <button onClick={() => { setActiveRole("citizen"); setActivePage("dashboard"); setMobileMenuOpen(false); }} className={`py-2 rounded-xl text-xs font-bold ${activeRole === "citizen" ? "bg-sky-600 text-white" : "bg-slate-100"}`}>Citizen</button>
+              <button onClick={() => { setActiveRole("worker"); setMobileMenuOpen(false); }} className={`py-2 rounded-xl text-xs font-bold ${activeRole === "worker" ? "bg-emerald-600 text-white" : "bg-slate-100"}`}>Worker</button>
+              <button onClick={() => { setActiveRole("admin"); setMobileMenuOpen(false); }} className={`py-2 rounded-xl text-xs font-bold ${activeRole === "admin" ? "bg-purple-600 text-white" : "bg-slate-100"}`}>Official</button>
             </div>
           </div>
         </div>
@@ -567,16 +567,16 @@ export default function App() {
       )}
 
       {/* PERSISTENT STRUCTURAL FOOTER */}
-      <footer className="bg-neutral-950 border-t border-neutral-900/60 py-8 relative z-10 text-neutral-600 font-light">
+      <footer className="bg-white border-t border-slate-200 py-8 relative z-10 text-slate-500 font-light">
         <div className="max-w-7xl mx-auto px-6 flex flex-col md:flex-row items-center justify-between gap-4 text-[11px]">
           <div>
-            <span className="font-semibold block text-neutral-400">© 2026 CityGPT Municipal Network Control</span>
+            <span className="font-bold block text-slate-800">© 2026 CityGPT Municipal Network Control</span>
             <span>Real-time Smart City Framework. All node components compiled successfully.</span>
           </div>
-          <div className="flex gap-4.5 text-neutral-500">
-            <span className="cursor-pointer hover:text-neutral-300">Subsidy Subscriptions</span>
-            <span className="cursor-pointer hover:text-neutral-300">Telemetry safety rules</span>
-            <span className="cursor-pointer hover:text-neutral-300">Smart API Licences</span>
+          <div className="flex gap-4.5 text-slate-400 font-bold">
+            <span className="cursor-pointer hover:text-slate-650">Subsidy Subscriptions</span>
+            <span className="cursor-pointer hover:text-slate-650">Telemetry safety rules</span>
+            <span className="cursor-pointer hover:text-slate-650">Smart API Licences</span>
           </div>
         </div>
       </footer>
