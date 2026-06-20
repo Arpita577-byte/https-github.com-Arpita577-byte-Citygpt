@@ -1,5 +1,6 @@
 import express from "express";
 import path from "path";
+import { fileURLToPath } from "url";
 import { createServer as createViteServer } from "vite";
 import { GoogleGenAI, Type } from "@google/genai";
 import dotenv from "dotenv";
@@ -7,8 +8,9 @@ import dotenv from "dotenv";
 // Load environment variables
 dotenv.config();
 
-const app = express();
+export const app = express();
 const PORT = 3000;
+const __filename = fileURLToPath(import.meta.url);
 
 // Express JSON parsing limit increased for base64 images
 app.use(express.json({ limit: "15mb" }));
@@ -694,4 +696,6 @@ async function startServer() {
   });
 }
 
-startServer();
+if (process.argv[1] === __filename) {
+  startServer();
+}
